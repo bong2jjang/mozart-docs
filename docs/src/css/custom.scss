@@ -1,0 +1,213 @@
+/* stylelint-disable docusaurus/copyright-header */
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #176edb;
+  --ifm-color-primary-dark: #1563c5;
+  --ifm-color-primary-darker: #145dba;
+  --ifm-color-primary-darkest: #104d99;
+  --ifm-color-primary-light: #227ae8;
+  --ifm-color-primary-lighter: #2d81e9;
+  --ifm-color-primary-lightest: #4e94ec;
+  --ifm-code-font-size: 95%;
+
+  /* Search bar variables override */
+  --ifm-navbar-search-input-background-color: #fff;
+  --ifm-navbar-search-input-color: #333;
+  --ifm-navbar-search-input-placeholder-color: #666;
+
+  /* Search local plugin variables */
+  --search-local-modal-background: #fff;
+  --search-local-hit-background: #fff;
+  --search-local-hit-color: #333;
+  --search-local-muted-color: #666;
+  --search-local-highlight-color: var(--ifm-color-primary);
+  --search-local-hit-active-color: #fff;
+}
+
+main {
+  padding-top: calc(var(--ifm-spacing-horizontal)*2);
+}
+
+main>div {
+  padding-left: 5rem !important;
+  padding-right: 5rem !important;
+}
+
+.badge {
+  display: none;
+}
+
+.navbar {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 6px 24px 0px, rgba(0, 0, 0, 0.16) 0px 0px 0px 1px;
+}
+
+/*
+ * Docs sidebar
+ */
+
+.menu {
+  font-size: 0.85rem;
+}
+
+.menu>ul.menu__list>li.menu__list-item>div.menu__list-item-collapsible:hover {
+  background: none;
+}
+
+.menu>ul.menu__list>li.menu__list-item>div.menu__list-item-collapsible>a.menu__link--sublist:first-child {
+  cursor: default;
+  margin-top: calc(var(--ifm-spacing-vertical) * 1.5);
+  font-weight: bold;
+  color: var(--custom-content-color-lightest);
+  text-transform: uppercase;
+
+  :hover {
+    background: none !important;
+  }
+}
+
+.menu .menu__link.menu__link--sublist::after {
+  background: none;
+}
+
+/* Search box styles - Local search plugin */
+.navbar .navbar__search {
+  position: relative;
+}
+
+/* Search icon (magnifying glass) */
+.navbar .navbar__search svg,
+.navbar .navbar__search .search-icon,
+.navbar .navbar__search::before {
+  color: #555 !important;
+  fill: #555 !important;
+  stroke: #555 !important;
+}
+
+.navbar .navbar__search .navbar__search-input,
+.navbar .navbar__search input[type="search"],
+.navbar input.navbar__search-input,
+input.navbar__search-input {
+  background-color: #fff !important;
+  background: #fff !important;
+  color: #333 !important;
+  border: 1px solid #ccc !important;
+  border-radius: 6px !important;
+  padding: 0.5rem 1rem !important;
+  padding-left: 2.2rem !important;
+  width: 220px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  -webkit-text-fill-color: #333 !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23555555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: 0.6rem center !important;
+  background-size: 16px !important;
+}
+
+.navbar .navbar__search .navbar__search-input::placeholder,
+.navbar input.navbar__search-input::placeholder,
+input.navbar__search-input::placeholder {
+  color: #666 !important;
+  -webkit-text-fill-color: #666 !important;
+  opacity: 1 !important;
+}
+
+.navbar .navbar__search .navbar__search-input:focus,
+.navbar input.navbar__search-input:focus,
+input.navbar__search-input:focus {
+  background-color: #fff !important;
+  background: #fff !important;
+  color: #333 !important;
+  border-color: var(--ifm-color-primary) !important;
+  width: 280px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23555555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: 0.6rem center !important;
+  background-size: 16px !important;
+}
+
+/* Search shortcut hint (Ctrl+K) */
+.navbar .navbar__search .DocSearch-Button-Keys,
+.navbar .DocSearch-Button-Key,
+.navbar .search-shortcut,
+.navbar [class*="shortcut"],
+.navbar [class*="Hint"],
+.navbar [class*="searchHint"] {
+  background: #e8e8e8 !important;
+  background-color: #e8e8e8 !important;
+  color: #444 !important;
+  -webkit-text-fill-color: #444 !important;  
+  padding: 2px 6px !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+}
+
+/* Search dropdown results */
+.search-result-match {
+  color: #333 !important;
+}
+
+/* Search results dropdown */
+.search-result-container,
+.DocSearch-Dropdown,
+.dsla-search-results,
+[class*="searchResult"],
+[class*="search-result"] {
+  background: #fff !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Search result items */
+.search-result-container *,
+.DocSearch-Hit,
+.dsla-search-results *,
+[class*="searchResult"] *,
+[class*="search-result"] * {
+  color: #333 !important;
+  -webkit-text-fill-color: #333 !important;
+}
+
+/* Search result title */
+.search-result-container h2,
+.search-result-container h3,
+.search-result-container .title,
+[class*="searchResult"] h2,
+[class*="searchResult"] h3 {
+  color: #111 !important;
+  -webkit-text-fill-color: #111 !important;
+  font-weight: 600 !important;
+}
+
+/* Search result description/excerpt */
+.search-result-container p,
+.search-result-container .excerpt,
+.search-result-container .description,
+[class*="searchResult"] p {
+  color: #555 !important;
+  -webkit-text-fill-color: #555 !important;
+}
+
+/* Search result highlight */
+.search-result-container mark,
+.search-result-container .highlight,
+[class*="searchResult"] mark {
+  background-color: #fff3cd !important;
+  color: #333 !important;
+  -webkit-text-fill-color: #333 !important;
+}
+
+/* Search result link hover */
+.search-result-container a:hover,
+[class*="searchResult"] a:hover {
+  background-color: #f5f5f5 !important;
+}

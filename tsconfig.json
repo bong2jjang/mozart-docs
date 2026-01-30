@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "outDir": "./lib/",
+    "baseUrl": ".",
+    "module": "commonjs",
+    "target": "es2023",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "sourceMap": true,
+    "declaration": true,
+    "lib": [
+      "es2023",
+      "dom"
+    ]
+  },
+  "include": [
+    "./packages/**/index.ts",
+    "./packages/**/src/**/*.ts",
+    "./packages/**/src/**/*.tsx"
+  ]
+}

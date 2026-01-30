@@ -1,0 +1,56 @@
+{
+  "name": "@foal/graphiql",
+  "version": "5.2.0",
+  "description": "GraphiQL integration for FoalTS",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "test": "rimraf lib && node copy-files lib && tsc -p tsconfig.json && mocha \"./lib/**/*.spec.js\"",
+    "dev:test": "node copy-files src && mocha --require ts-node/register --watch --extension ts \"./src/**/*.spec.ts\"",
+    "build": "rimraf lib && node copy-files lib && tsc -p tsconfig-build.json",
+    "prepublish": "npm run build"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/LoicPoullain"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "FoalTS",
+    "foal",
+    "GraphiQL"
+  ],
+  "bugs": {
+    "url": "https://github.com/FoalTS/foal/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FoalTS/foal"
+  },
+  "homepage": "https://github.com/FoalTS",
+  "contributors": [
+    "Loïc Poullain"
+  ],
+  "license": "MIT",
+  "files": [
+    "lib/"
+  ],
+  "dependencies": {
+    "@foal/core": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "10.0.10",
+    "@types/node": "24.10.0",
+    "graphiql": "~3.1.1",
+    "mocha": "~11.7.5",
+    "react": "~18.2.0",
+    "react-dom": "~18.2.0",
+    "rimraf": "~6.1.0",
+    "ts-node": "~10.9.2",
+    "typescript": "~5.5.4"
+  }
+}

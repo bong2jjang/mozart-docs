@@ -1,0 +1,68 @@
+{
+  "name": "@foal/cli",
+  "version": "5.2.0",
+  "description": "CLI tool for FoalTS",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "test": "rimraf lib && tsc -p tsconfig.json && mocha --file \"./lib/test.js\" \"./lib/**/*.spec.js\"",
+    "dev:test:commands": "mocha --file \"./src/test.ts\" --require ts-node/register --watch --extension ts \"./src/commands/**/*.spec.ts\"",
+    "dev:test:services": "mocha --file \"./src/test.ts\" --require ts-node/register --watch --extension ts \"./src/services/**/*.spec.ts\"",
+    "build": "rimraf lib && tsc -p tsconfig-build.json",
+    "prepublish": "npm run build"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/LoicPoullain"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bin": {
+    "foal": "./lib/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "foal",
+    "FoalTS",
+    "FoalTS CLI",
+    "devkit",
+    "sdk",
+    "FoalTS DevKit",
+    "foalts-cli"
+  ],
+  "bugs": {
+    "url": "https://github.com/FoalTS/foal/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FoalTS/foal"
+  },
+  "homepage": "https://github.com/FoalTS",
+  "contributors": [
+    "Loïc Poullain"
+  ],
+  "license": "MIT",
+  "files": [
+    "lib/",
+    "bin/",
+    "templates/"
+  ],
+  "dependencies": {
+    "ajv": "~8.17.1",
+    "ajv-formats": "~2.1.1",
+    "cli-spinner": "~0.2.10",
+    "colors": "1.4.0",
+    "commander": "~14.0.2"
+  },
+  "devDependencies": {
+    "@foal/core": "^5.2.0",
+    "@types/mocha": "10.0.10",
+    "@types/node": "24.10.0",
+    "mocha": "~11.7.5",
+    "rimraf": "~6.1.0",
+    "ts-node": "~10.9.2",
+    "typescript": "~5.5.4"
+  }
+}

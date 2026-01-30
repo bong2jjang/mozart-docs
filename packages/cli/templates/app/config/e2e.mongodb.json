@@ -1,0 +1,10 @@
+{
+  "settings": {
+    "logger": {
+      "logHttpRequests": false
+    }
+  },
+  "database": {
+    "url": "mongodb://localhost:27017/e2e-/* kebabName */"
+  }
+}

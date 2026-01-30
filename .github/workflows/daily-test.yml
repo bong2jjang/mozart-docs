@@ -1,0 +1,31 @@
+name: DailyTest
+
+on:
+  schedule:
+    - cron: '0 8 * * 1-5'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [22, 24]
+    
+    services:
+      mongodb:
+        image: mongo:4.0.18
+        ports:
+          - 27017:27017
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install FoalTS CLI
+      run: npm install -g @foal/cli
+    - name: Run E2E tests (Bash)
+      run: ./e2e_test.sh
