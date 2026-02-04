@@ -1,0 +1,74 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.someSidebar.category.architecture": {
+    "message": "architecture",
+    "description": "The label for category 'architecture' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.authentication": {
+    "message": "authentication",
+    "description": "The label for category 'authentication' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.authorization": {
+    "message": "authorization",
+    "description": "The label for category 'authorization' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.cli": {
+    "message": "cli",
+    "description": "The label for category 'cli' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.common": {
+    "message": "common",
+    "description": "The label for category 'common' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.file-storage": {
+    "message": "file-storage",
+    "description": "The label for category 'file-storage' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.comparison-with-other-frameworks": {
+    "message": "comparison-with-other-frameworks",
+    "description": "The label for category 'comparison-with-other-frameworks' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.databases": {
+    "message": "databases",
+    "description": "The label for category 'databases' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.other-orm": {
+    "message": "other-orm",
+    "description": "The label for category 'other-orm' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.typeorm": {
+    "message": "typeorm",
+    "description": "The label for category 'typeorm' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.deployment-and-environments": {
+    "message": "deployment-and-environments",
+    "description": "The label for category 'deployment-and-environments' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.frontend": {
+    "message": "frontend",
+    "description": "The label for category 'frontend' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.security": {
+    "message": "security",
+    "description": "The label for category 'security' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.testing": {
+    "message": "testing",
+    "description": "The label for category 'testing' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.tutorials": {
+    "message": "tutorials",
+    "description": "The label for category 'tutorials' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.real-world-example-with-react": {
+    "message": "real-world-example-with-react",
+    "description": "The label for category 'real-world-example-with-react' in sidebar 'someSidebar'"
+  },
+  "sidebar.someSidebar.category.simple-todo-list": {
+    "message": "simple-todo-list",
+    "description": "The label for category 'simple-todo-list' in sidebar 'someSidebar'"
+  }
+}

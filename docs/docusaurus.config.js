@@ -9,21 +9,12 @@ module.exports = {
   organizationName: 'Mozart', // Usually your GitHub org/user name.
   projectName: 'mozart', // Usually your repo name.
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'fr', 'es', 'id'],
+    defaultLocale: 'ko',
+    locales: ['ko', 'en', 'zh-Hans'],
     localeConfigs: {
-      en: {
-        label: 'EN',
-      },
-      fr: {
-        label: 'FR',
-      },
-      es: {
-        label: 'ES',
-      },
-      id: {
-        label: 'Bahasa Indonesia',
-      },
+      ko: { label: '한국어' },
+      en: { label: 'English' },
+      'zh-Hans': { label: '简体中文' },
     },
   },
   scripts: [],
@@ -110,35 +101,21 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/Mozart/mozart/edit/master/docs/',
-          lastVersion: "current",
+            'https://github.com/bong2jjang/mozart-docs/edit/main/docs/',
+          lastVersion: 'current',
           versions: {
             current: {
-              "label": `v${require('../lerna.json').version[0]}`,
+              label: 'Next',
             },
-            '4.x': {
-              'label': 'v4',
-              banner: 'none',
-              noIndex: true
+            '1.0': {
+              label: 'v1.0',
             },
-            '3.x': {
-              'label': 'v3',
-              noIndex: true
-            },
-            '2.x': {
-              'label': 'v2',
-              noIndex: true
-            },
-            '1.x': {
-              'label': 'v1',
-              noIndex: true
-            }
-          }
+          },
         },
         blog: {
           showReadingTime: true,
           editUrl:
-            'https://github.com/Mozart/mozart/edit/master/docs',
+            'https://github.com/bong2jjang/mozart-docs/edit/main/docs',
         },
         googleAnalytics: {
           trackingID: 'UA-112613053-1',

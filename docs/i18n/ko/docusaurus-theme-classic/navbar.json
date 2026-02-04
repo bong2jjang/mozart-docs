@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "Mozart",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Mozart Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.APS": {
+    "message": "APS",
+    "description": "Navbar item with label APS"
+  },
+  "item.label.DP": {
+    "message": "DP",
+    "description": "Navbar item with label DP"
+  },
+  "item.label.Platform": {
+    "message": "Platform",
+    "description": "Navbar item with label Platform"
+  }
+}
