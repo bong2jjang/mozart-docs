@@ -1,19 +1,27 @@
 /* stylelint-disable docusaurus/copyright-header */
 
 /*
- * Colors
+ * Colors - Dagster-inspired palette
  */
 
-$bg-white: #fafafa;
-$text-white: hsl(226, 100%, 95%);
+$bg-white: #f9fafb;
+$bg-surface: #ffffff;
+$text-white: #f1f5f9;
 
-$light-blue: hsl(213, 89%, 53%);
-$darker-blue: hsl(213, 81%, 48%);
-$medium-blue: hsl(213, 59%, 23%);
-$medium-blue2: hsl(213, 69%, 23%);
+/* Purple-blue gradient colors */
+$primary-purple: #6366f1;
+$primary-blue: #4f46e5;
+$accent-purple: #8b5cf6;
+$accent-cyan: #06b6d4;
 
-$orange: hsl(39, 80%, 60%);
-$text-orange-white: hsl(39, 100%, 95%);
+/* Gradient backgrounds */
+$gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+$gradient-secondary: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+
+/* Button colors */
+$button-primary: #6366f1;
+$button-primary-hover: #4f46e5;
+$text-button-white: #ffffff;
 
 /*
  * Sizes
@@ -61,28 +69,38 @@ $max-content-width: 1280px;
  */
 
 .btn {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin: 0 8px;
-  font-family: Arial;
-  border-radius: 6px;
-  padding: 0.8rem 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.75rem 1.75rem;
+  transition: all 0.2s ease;
 
-  box-shadow: 3px 5px 20px rgba(0, 0, 0, 0.3);
-  background-color: $orange;
-  color: $text-orange-white;
-  text-transform: uppercase;
-  border: solid 1px $orange;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background-color: $button-primary;
+  color: $text-button-white;
+  border: solid 2px $button-primary;
 }
 
 .btn:hover {
   text-decoration: none;
   color: white;
+  background-color: $button-primary-hover;
+  border-color: $button-primary-hover;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
 }
 
 .btnSecondary {
   background-color: transparent;
   color: $text-white;
-  text-transform: none;
+  border-color: rgba(241, 245, 249, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.btnSecondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
   border-color: $text-white;
 }
 
@@ -108,11 +126,27 @@ $max-content-width: 1280px;
     height: 570px;
   }
 
-  background-color: $light-blue;
+  background: $gradient-primary;
   background-size: cover;
+  position: relative;
+  overflow: hidden;
+
+  /* Add subtle animated gradient overlay */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(139, 92, 246, 0.3) 50%, rgba(6, 182, 212, 0.3) 100%);
+    opacity: 0.6;
+  }
 
   .content {
     padding-top: 90px;
+    position: relative;
+    z-index: 1;
 
     // Takes into account the line break of the title.
     @media (max-width: 880px) {
@@ -211,7 +245,7 @@ $max-content-width: 1280px;
 .allInOneSection {
   @include section();
 
-  background-color: $light-blue;
+  background: $gradient-secondary;
   background-size: cover;
 
 
@@ -221,7 +255,7 @@ $max-content-width: 1280px;
   }
 
   h3 {
-    color: $medium-blue2;
+    color: $primary-purple;
   }
 
   p {
@@ -265,28 +299,51 @@ $max-content-width: 1280px;
   background-color: $bg-white;
 
   h2 {
-    color: $light-blue;
-    font-weight: normal;
+    color: $primary-purple;
+    font-weight: 600;
   }
 
   p {
-    color: black;
+    color: #1f2937;
   }
 }
 
 .typescriptSection {
   @include section();
 
-  background-color: $darker-blue;
+  background: $gradient-secondary;
+  position: relative;
+  overflow: hidden;
+
+  /* Add subtle pattern overlay */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(6, 182, 212, 0.2) 100%);
+    opacity: 0.4;
+  }
 
   h2 {
     color: $text-white;
     font-weight: bold;
+    position: relative;
+    z-index: 1;
   }
 
   p {
     color: $text-white;
     font-size: 1.05rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .col1, .col2 {
+    position: relative;
+    z-index: 1;
   }
 }
 

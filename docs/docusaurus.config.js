@@ -27,12 +27,11 @@ module.exports = {
     // },
     colorMode: {
       defaultMode: 'light',
-      disableSwitch: true,
-      respectPrefersColorScheme: false,
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
     },
     navbar: {
       title: 'Mozart',
-      style: 'primary',
       hideOnScroll: true,
       logo: {
         alt: 'Mozart Logo',
@@ -40,18 +39,20 @@ module.exports = {
       },
       items: [
         {
-          to: 'docs/',
-          activeBasePath: 'docs',
+          to: 'docs/aps',
+          activeBasePath: 'docs/aps',
           label: 'APS',
           position: 'left',
         },
         {
-          to: 'blog',
+          to: 'docs/dp',
+          activeBasePath: 'docs/dp',
           label: 'DP',
           position: 'left'
         },
         {
           to: 'docs/platform',
+          activeBasePath: 'docs/platform',
           label: 'Platform',
           position: 'left'
         },
@@ -72,11 +73,12 @@ module.exports = {
       '@easyops-cn/docusaurus-search-local',
       {
         hashed: true,
-        language: ['en'],
+        language: ['en', 'ko', 'zh'],
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
         indexBlog: false,
         docsRouteBasePath: '/docs',
+        searchBarShortcutHint: false,
       },
     ],
   ],
@@ -112,11 +114,7 @@ module.exports = {
             },
           },
         },
-        blog: {
-          showReadingTime: true,
-          editUrl:
-            'https://github.com/bong2jjang/mozart-docs/edit/main/docs',
-        },
+        blog: false,
         googleAnalytics: {
           trackingID: 'UA-112613053-1',
           anonymizeIP: true,
