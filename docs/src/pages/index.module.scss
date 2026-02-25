@@ -120,10 +120,12 @@ $max-content-width: 1280px;
 }
 
 .masthead {
-  height: 500px;
+  height: auto;
+  min-height: 500px;
+  padding: 6rem 2rem;
 
   @media (min-width: $large-screen) {
-    height: 570px;
+    min-height: 570px;
   }
 
   background: $gradient-primary;
@@ -144,38 +146,36 @@ $max-content-width: 1280px;
   }
 
   .content {
-    padding-top: 90px;
     position: relative;
     z-index: 1;
-
-    // Takes into account the line break of the title.
-    @media (max-width: 880px) {
-      padding-top: 40px;
-    }
-
-    @media (max-width: $small-screen) {
-      padding-top: 40px;
-    }
-
-    @media (min-width: $large-screen) {
-      padding-top: 120px;
-    }
-
-
+    max-width: 900px;
+    margin: 0 auto;
     text-align: center;
   }
 
   h1 {
     color: $text-white;
-
     font-family: Arial;
-    font-size: 3.9rem;
-    font-weight: normal;
-
-    margin-bottom: 20px;
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     @media (max-width: $small-screen) {
-      font-size: 40px;
+      font-size: 2.5rem;
+    }
+  }
+
+  h2 {
+    color: $text-white;
+    font-family: Arial;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    opacity: 0.95;
+
+    @media (max-width: $small-screen) {
+      font-size: 1.5rem;
     }
   }
 
@@ -184,12 +184,30 @@ $max-content-width: 1280px;
     font-size: 1.6rem;
     font-family: Arial;
     color: $text-white;
-
     margin-bottom: 50px;
 
     @media (max-width: $medium-screen) {
       margin-bottom: 40px;
     }
+  }
+
+  .subtitle {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+    color: $text-white;
+
+    @media (max-width: $small-screen) {
+      font-size: 1rem;
+    }
+  }
+
+  .btnGroup {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .githubBtns {
@@ -567,5 +585,325 @@ $max-content-width: 1280px;
   .chatLink:before {
     // https://fontawesome.com/license
     background: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 448 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M297.216 243.2c0 15.616-11.52 28.416-26.112 28.416-14.336 0-26.112-12.8-26.112-28.416s11.52-28.416 26.112-28.416c14.592 0 26.112 12.8 26.112 28.416zm-119.552-28.416c-14.592 0-26.112 12.8-26.112 28.416s11.776 28.416 26.112 28.416c14.592 0 26.112-12.8 26.112-28.416.256-15.616-11.52-28.416-26.112-28.416zM448 52.736V512c-64.494-56.994-43.868-38.128-118.784-107.776l13.568 47.36H52.48C23.552 451.584 0 428.032 0 398.848V52.736C0 23.552 23.552 0 52.48 0h343.04C424.448 0 448 23.552 448 52.736zm-72.96 242.688c0-82.432-36.864-149.248-36.864-149.248-36.864-27.648-71.936-26.88-71.936-26.88l-3.584 4.096c43.52 13.312 63.744 32.512 63.744 32.512-60.811-33.329-132.244-33.335-191.232-7.424-9.472 4.352-15.104 7.424-15.104 7.424s21.248-20.224 67.328-33.536l-2.56-3.072s-35.072-.768-71.936 26.88c0 0-36.864 66.816-36.864 149.248 0 0 21.504 37.12 78.08 38.912 0 0 9.472-11.52 17.152-21.248-32.512-9.728-44.8-30.208-44.8-30.208 3.766 2.636 9.976 6.053 10.496 6.4 43.21 24.198 104.588 32.126 159.744 8.96 8.96-3.328 18.944-8.192 29.44-15.104 0 0-12.8 20.992-46.336 30.464 7.68 9.728 16.896 20.736 16.896 20.736 56.576-1.792 78.336-38.912 78.336-38.912z'/%3E%3C/svg%3E") no-repeat;
+  }
+}
+
+/* New sections for MOZART Cloud redesign */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: #1f2937;
+}
+
+/* Services Section */
+.servicesSection {
+  padding: 5rem 0;
+  background-color: $bg-white;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.featureCard {
+  background: $bg-surface;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .featureIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: $primary-purple;
+  }
+
+  p {
+    color: #6b7280;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+/* Platform Sections */
+.platformSection,
+.platformSectionAlt {
+  padding: 5rem 0;
+}
+
+.platformSection {
+  background-color: $bg-surface;
+}
+
+.platformSectionAlt {
+  background-color: $bg-white;
+}
+
+.platformContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+
+  @media (max-width: 968px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.platformText {
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #1f2937;
+  }
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+
+  li {
+    font-size: 1rem;
+    color: #1f2937;
+    padding: 0.5rem 0;
+    line-height: 1.6;
+  }
+}
+
+.learnMore {
+  display: inline-block;
+  color: $primary-purple;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-decoration: none;
+  margin-top: 1rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: $primary-blue;
+    transform: translateX(4px);
+  }
+}
+
+.platformImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .imagePlaceholder {
+    width: 100%;
+    height: 350px;
+    background: $gradient-secondary;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Advantages Section */
+.advantagesSection {
+  padding: 5rem 0;
+  background: $gradient-primary;
+  color: $text-white;
+
+  .sectionTitle {
+    color: $text-white;
+  }
+}
+
+.advantagesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.advantageCard {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-4px);
+  }
+
+  .advantageNumber {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    opacity: 0.9;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+/* CTA Section */
+.ctaSection {
+  padding: 5rem 0;
+  text-align: center;
+  background-color: $bg-white;
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #1f2937;
+  }
+
+  p {
+    font-size: 1.25rem;
+    color: #6b7280;
+    margin-bottom: 2.5rem;
+  }
+}
+
+/* Footer */
+.footer {
+  background-color: #0f172a;
+  color: $text-white;
+  padding: 4rem 0 2rem;
+
+  .footerContent {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footerSection {
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: $primary-purple;
+    }
+
+    h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.8;
+      margin: 0.5rem 0;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin: 0.5rem 0;
+
+        a {
+          color: rgba(255, 255, 255, 0.8);
+          text-decoration: none;
+          transition: color 0.2s ease;
+
+          &:hover {
+            color: $primary-purple;
+          }
+        }
+      }
+    }
+  }
+
+  .footerBottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+    text-align: center;
+
+    p {
+      color: rgba(255, 255, 255, 0.6);
+      margin: 0;
+    }
+  }
+}
+
+/* Dark Mode Support */
+[data-theme='dark'] {
+  .servicesSection,
+  .platformSection {
+    background-color: #0f172a;
+  }
+
+  .platformSectionAlt,
+  .ctaSection {
+    background-color: #1e293b;
+  }
+
+  .sectionTitle,
+  .platformText h2,
+  .ctaSection h2 {
+    color: $text-white;
+  }
+
+  .platformText p,
+  .ctaSection p,
+  .featureCard p {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .featureCard {
+    background: #1e293b;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  }
+
+  .featureList li {
+    color: rgba(255, 255, 255, 0.9);
   }
 }
