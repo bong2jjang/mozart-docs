@@ -134,9 +134,23 @@ main>div {
   color: #f1f5f9 !important;
 }
 
-/* Hide navbar title text, show only logo */
-.navbar__title {
+/* Hide navbar title text, show only logo - applies to all navbar states */
+.navbar__title,
+.navbar--fixed-top .navbar__title,
+.navbar--show-secondary .navbar__title,
+.navbar__brand .navbar__title,
+a.navbar__brand .navbar__title,
+.navbar .navbar__brand .navbar__title {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
 }
 
 .navbar__link,
@@ -929,20 +943,84 @@ table thead {
   border-left-color: var(--ifm-color-primary);
 }
 
-/* Logo size adjustment */
-.navbar__logo {
-  display: flex;
-  align-items: center;
+/* LOGO STRATEGY: Hide everywhere by default, show only in top navbar */
+
+/* Step 1: Hide navbar__brand everywhere */
+body .navbar__brand,
+body a.navbar__brand {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
 
-.navbar__logo img {
-  width: 70%;
+/* Step 2: Show ONLY in the actual top fixed navbar */
+.navbar.navbar--fixed-top .navbar__brand,
+.navbar.navbar--fixed-top a.navbar__brand,
+nav.navbar:not(.menu):not([class*="sidebar"]) .navbar__brand,
+nav.navbar:not(.menu):not([class*="sidebar"]) a.navbar__brand {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Keep top navbar logo at original size - no custom sizing */
+.navbar.navbar--fixed-top .navbar__logo img {
   height: auto;
-  display: block;
+  width: auto;
 }
 
-.navbar__brand {
-  margin-right: 0;
-  display: flex;
-  align-items: center;
+/* Step 3: Hide logo.png images in sidebar contexts */
+aside img[src*="logo.png"],
+aside img[src*="/img/logo"],
+.theme-doc-sidebar-container img[src*="logo.png"],
+.theme-doc-sidebar-container img[src*="/img/logo"],
+[class*="sidebar"] img[src*="logo.png"],
+[class*="sidebar"] img[src*="/img/logo"],
+[class*="Sidebar"] img[src*="logo.png"],
+[class*="Sidebar"] img[src*="/img/logo"],
+.menu img[src*="logo.png"],
+.menu img[src*="/img/logo"],
+div[class*="docSidebar"] img[src*="logo.png"],
+div[class*="docSidebar"] img[src*="/img/logo"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Step 4: Hide any text nodes near sidebar logos */
+aside .navbar__brand,
+aside a.navbar__brand,
+.theme-doc-sidebar-container .navbar__brand,
+.theme-doc-sidebar-container a.navbar__brand,
+[class*="sidebar"] .navbar__brand,
+[class*="sidebar"] a.navbar__brand,
+[class*="Sidebar"] .navbar__brand,
+[class*="Sidebar"] a.navbar__brand,
+.menu .navbar__brand,
+.menu a.navbar__brand,
+div[class*="docSidebar"] .navbar__brand,
+div[class*="docSidebar"] a.navbar__brand {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Step 5: Nuclear option - hide ALL images and brand in non-navbar contexts */
+body aside *[class*="logo"],
+body aside *[class*="Logo"],
+body aside *[class*="brand"],
+body aside *[class*="Brand"],
+body [class*="sidebar"] *[class*="logo"],
+body [class*="sidebar"] *[class*="Logo"],
+body [class*="sidebar"] *[class*="brand"],
+body [class*="sidebar"] *[class*="Brand"],
+body [class*="Sidebar"] *[class*="logo"],
+body [class*="Sidebar"] *[class*="Logo"],
+body [class*="Sidebar"] *[class*="brand"],
+body [class*="Sidebar"] *[class*="Brand"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }

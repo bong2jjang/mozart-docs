@@ -12,7 +12,12 @@ module.exports = {
     defaultLocale: 'ko',
     locales: ['ko'],
   },
-  scripts: [],
+  scripts: [
+    {
+      src: '/js/custom.js',
+      async: false,
+    },
+  ],
   themeConfig: {
     image: 'img/meta-image.png',
     // announcementBar: {
