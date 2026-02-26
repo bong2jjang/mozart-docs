@@ -99,7 +99,7 @@ module.exports = {
           lastVersion: 'current',
           versions: {
             current: {
-              label: '최신',
+              label: 'Latest',
             },
             '1.0': {
               label: 'v1.0',
