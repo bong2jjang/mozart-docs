@@ -134,6 +134,11 @@ main>div {
   color: #f1f5f9 !important;
 }
 
+/* Hide navbar title text, show only logo */
+.navbar__title {
+  display: none !important;
+}
+
 .navbar__link,
 .navbar__item {
   font-weight: 500;
@@ -925,11 +930,19 @@ table thead {
 }
 
 /* Logo size adjustment */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+}
+
 .navbar__logo img {
   width: 70%;
   height: auto;
+  display: block;
 }
 
 .navbar__brand {
   margin-right: 0;
+  display: flex;
+  align-items: center;
 }

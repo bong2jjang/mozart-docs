@@ -176,7 +176,6 @@ function Home() {
     <Layout description="Cloud-based SCP solution enabling digital transformation of manufacturing operations">
       <header className={styles.masthead}>
         <div className={styles.content}>
-          <h1>{t.title}</h1>
           <h2>{t.subtitle1}</h2>
           <p className={styles.subtitle}>
             {t.subtitle2}
