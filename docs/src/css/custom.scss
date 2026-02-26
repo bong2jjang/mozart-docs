@@ -923,3 +923,13 @@ table thead {
   font-weight: 600;
   border-left-color: var(--ifm-color-primary);
 }
+
+/* Logo size adjustment */
+.navbar__logo img {
+  width: 70%;
+  height: auto;
+}
+
+.navbar__brand {
+  margin-right: 0;
+}

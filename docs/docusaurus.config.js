@@ -10,12 +10,7 @@ module.exports = {
   projectName: 'mozart', // Usually your repo name.
   i18n: {
     defaultLocale: 'ko',
-    locales: ['ko', 'en', 'zh-Hans'],
-    localeConfigs: {
-      ko: { label: '한국어' },
-      en: { label: 'English' },
-      'zh-Hans': { label: '简体中文' },
-    },
+    locales: ['ko'],
   },
   scripts: [],
   themeConfig: {
@@ -31,7 +26,7 @@ module.exports = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Mozart',
+      title: '',
       hideOnScroll: true,
       logo: {
         alt: 'Mozart Logo',
@@ -61,10 +56,6 @@ module.exports = {
           position: 'right',
           dropdownActiveClassDisabled: true,
         },
-        {
-          type: 'localeDropdown',
-          position: 'right',
-        },
       ],
     }
   },
@@ -73,12 +64,13 @@ module.exports = {
       '@easyops-cn/docusaurus-search-local',
       {
         hashed: true,
-        language: ['en', 'ko', 'zh'],
+        language: ['en', 'zh'],
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
         indexBlog: false,
         docsRouteBasePath: '/docs',
         searchBarShortcutHint: false,
+        ignoreFiles: [],
       },
     ],
   ],
