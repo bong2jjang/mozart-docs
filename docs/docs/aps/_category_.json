@@ -1,0 +1,8 @@
+{
+  "label": "APS",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "APS 시스템 관련 문서"
+  }
+}
