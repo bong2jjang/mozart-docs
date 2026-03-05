@@ -11,7 +11,7 @@ module.exports = {
   baseUrl: '/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/logo.png',
+  favicon: 'img/favicon.png',
   organizationName: 'Mozart', // Usually your GitHub org/user name.
   projectName: 'mozart', // Usually your repo name.
   i18n: {
@@ -64,7 +64,7 @@ module.exports = {
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
         indexBlog: false,
-        docsRouteBasePath: '/docs',
+        docsRouteBasePath: '/',
         searchBarShortcutHint: false,
         ignoreFiles: [],
       },
@@ -93,6 +93,7 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
+          routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
             'https://github.com/bong2jjang/mozart-docs/edit/main/docs/',

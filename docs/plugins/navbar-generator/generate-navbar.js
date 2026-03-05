@@ -31,8 +31,8 @@ function generateNavbarItems(siteDir, options = {}) {
 
     // navbar 아이템으로 변환
     const navbarItems = navbarData.map(item => ({
-      to: `docs/${item.folderName}`,
-      activeBasePath: `docs/${item.folderName}`,
+      to: `${item.folderName}`,
+      activeBasePath: `${item.folderName}`,
       label: item.label,
       position: defaultOptions.position
     }));
