@@ -74,6 +74,8 @@ module.exports = {
     'docusaurus-plugin-sass',
     // Navbar Generator Plugin - docs 폴더 변경 감지
     path.resolve(__dirname, './plugins/navbar-generator'),
+    // Chatbot Plugin - AI-powered documentation assistant
+    path.resolve(__dirname, './plugins/chatbot'),
     async function myPlugin(context, options) {
       return {
         name: "docusaurus-tailwindcss",

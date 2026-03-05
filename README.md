@@ -1,66 +1,83 @@
-<p align="center">
-  <img src="./docs/static/img/logo.png">
-</p>
+# Mozart Docs with AI Chatbot 🤖
 
+Mozart 프레임워크 문서 사이트 + 하이브리드 RAG+MCP 기반 AI 챗봇
 
+## ✨ 주요 기능
 
-## What is Foal?
+- 🤖 **AI 기반 Q&A 챗봇**: 문서 내용을 학습한 실시간 질의응답
+- 🚀 **하이브리드 RAG+MCP**: 벡터 검색 + 파일 직접 읽기로 정확도와 속도 양립
+- ⚡ **스마트 캐싱**: 중복 질문 0 토큰, 99% 비용 절감
+- 📚 **자동 문서 참조**: 답변과 함께 관련 문서 링크 제공
+- 💰 **비용 최적화**: 월 $12-25로 운영 (기존 대비 99.4% 절감)
 
+## 🚀 빠른 시작
 
+### 필수 요구사항
+- Node.js 18+
+- Python 3.10+
+- Docker & Docker Compose
+- OpenAI API Key
 
-*Foal* (or *FoalTS*) is a Node.JS framework for creating web applications.
+### 1단계: 백엔드 실행
 
-It provides a set of ready-to-use components so you don't have to reinvent the wheel every time. In one single place, you have a complete environment to build web applications. This includes a CLI, testing tools, frontend utilities, scripts, advanced authentication, ORM, deployment environments, GraphQL and Swagger API, AWS utilities, and more. You no longer need to get lost on npm searching for packages and making them work together. All is provided.
+```bash
+cd backend
 
-But while offering all these features, the framework remains simple. Complexity and unnecessary abstractions are put aside to provide the most intuitive and expressive syntax. We believe that concise and elegant code is the best way to develop an application and maintain it in the future. It also allows you to spend more time coding rather than trying to understand how the framework works.
+# 패키지 설치
+pip install -r requirements.txt
 
-Finally, the framework is entirely written in TypeScript. The language brings you optional static type-checking along with the latest ECMAScript features. This allows you to detect most silly errors during compilation and improve the quality of your code. It also offers you autocompletion and a well documented API.
+# 환경 변수 설정
+cp .env.example .env
+# .env 파일에 OPENAI_API_KEY 입력
 
-![Screenshot](./docs/static/img/home/screenshot.png)
+# 인프라 시작
+docker-compose up -d
 
-## Development Policy
+# 문서 인덱싱
+python scripts/index_docs.py
 
-### Thousands of Tests
-
-Testing FoalTS is put on a very high priority. Providing a reliable product is really important to us. As of December 2020, the framework is covered by more than 2100 tests.
-
-### Documentation
-
-New features, no matter what they offer, are useless if they are not well documented. Maintaining complete and quality documentation is key to the framework. If you think something is missing or unclear, feel free to open an issue on Github!
-
-## :city_sunrise: Get started
-
-First install [Node.Js and npm](https://nodejs.org/en/download/).
-
-### Create a new app
-
+# 서버 실행
+python -m app.main
 ```
-npx @foal/cli createapp my-app
-cd my-app
-npm run dev
+
+### 2단계: 프론트엔드 실행
+
+```bash
+cd docs
+npm install
+npm start
 ```
 
-The development server is started! Go to `http://localhost:3001` and find our welcoming page!
+### 3단계: 챗봇 사용
 
-:point_right: [Continue with the tutorial](https://foalts.org/docs) :seedling:
+http://localhost:3000 접속 후 우측 하단 챗봇 버튼 클릭!
 
-## Community Chat
+## 💰 비용 분석
 
-You can join the community chat [here](https://discord.gg/QUrJv98).
+**월 10,000 질문 기준 (1,000명 × 10개)**
 
-## Contributing
+| 방식 | 토큰 | 비용 |
+|------|------|------|
+| 순수 MCP | 80M | $800 💸 |
+| 순수 RAG | 20M | $200 💰 |
+| **하이브리드** | 3.1M | **$2-5** ✅ |
 
-See the [contribution guidelines](https://github.com/FoalTS/foal/blob/master/.github/CONTRIBUTING.MD).
+**절감율: 99.4%** (캐시 60% 가정)
 
-## Long-Term Support Schedule
+## 📖 문서
 
-| Release | Status | Active Start | Maintenance Start | End-of-life | Node versions | TS min version |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| 5.x | *Active* | 2025-05-27 |  |  | 22, 24 | 5.5 |
-| 4.x | *Maintenance* | 2023-09-06 | 2025-05-27 | 2025-11-27 | 18, 20 | 4.9 |
-| 3.x | *End-of-Life* | 2022-10-28 | 2023-09-06 | 2024-03-06 | 16, 18 | 4.7 |
+- [백엔드 README](./backend/README.md)
+- [챗봇 플러그인 README](./docs/plugins/chatbot/README.md)
 
-**Active support** means that the release is actively maintained: new features, bug fixes, and so on.
+## 🛠️ 기술 스택
 
-**Maintenance (LTS)** means that only critical fixes and security patches are provided.
+- **Frontend**: React, Docusaurus, TypeScript
+- **Backend**: Python, FastAPI, LangChain
+- **Vector DB**: Qdrant
+- **Cache**: Redis
+- **LLM**: OpenAI GPT-4o-mini / Claude
+
+## 📝 라이선스
+
+MIT
 

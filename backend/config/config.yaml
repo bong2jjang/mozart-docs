@@ -1,0 +1,52 @@
+# LLM 설정
+llm:
+  provider: "openai"  # openai, anthropic
+  model: "gpt-4o-mini"  # 비용 최적화
+  temperature: 0.7
+  max_tokens: 2000
+
+# 임베딩 설정
+embedding:
+  provider: "openai"
+  model: "text-embedding-3-small"  # 가장 저렴한 모델
+
+# 벡터 DB 설정
+vector_store:
+  provider: "qdrant"
+  collection_name: "mozart-docs"
+
+  qdrant:
+    url: "${QDRANT_URL}"
+    api_key: "${QDRANT_API_KEY}"
+
+# RAG 설정
+rag:
+  chunk_size: 500  # 토큰 절약을 위해 작게
+  chunk_overlap: 100
+  top_k_simple: 3  # 간단한 질문
+  top_k_moderate: 5  # 보통 질문
+  top_k_complex: 8  # 복잡한 질문
+  score_threshold: 0.3  # 유사도 임계값 (낮을수록 더 많은 문서 포함)
+
+# 캐싱 설정
+cache:
+  redis_url: "${REDIS_URL}"
+  ttl: 3600  # 1시간
+  semantic_threshold: 0.95  # 시맨틱 캐싱 유사도 임계값
+
+# 문서 경로
+documents:
+  path: "${DOCS_PATH}"
+  extensions: [".md", ".mdx"]
+  exclude_patterns:
+    - "node_modules"
+    - ".git"
+    - "build"
+
+# 서버 설정
+server:
+  host: "${HOST}"
+  port: "${PORT}"
+  cors_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8000"
