@@ -486,4 +486,440 @@
     border-color: #667eea;
     color: #667eea;
   }
+
+  .markdown-code-block pre {
+    background: #0f172a;
+  }
+
+  .markdown-code-block .code-header {
+    background: #1e293b;
+    border-bottom-color: #334155;
+  }
+
+  .markdown-inline-code {
+    background: #1e293b;
+    color: #e2e8f0;
+  }
+
+  .markdown-reference {
+    background: #1e293b;
+    color: #667eea;
+  }
+
+  .markdown-reference:hover {
+    background: #334155;
+  }
+}
+
+/* Markdown Content Styles */
+.markdown-content {
+  line-height: 1.7;
+}
+
+.markdown-content h1 {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin: 16px 0 12px 0;
+  color: #1e293b;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.markdown-content h2 {
+  font-size: 1.3em;
+  font-weight: 600;
+  margin: 14px 0 10px 0;
+  color: #334155;
+}
+
+.markdown-content h3 {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 12px 0 8px 0;
+  color: #475569;
+}
+
+.markdown-content strong {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.markdown-content em {
+  font-style: italic;
+  color: #475569;
+}
+
+.markdown-content a {
+  color: #667eea;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.markdown-content a:hover {
+  color: #764ba2;
+  text-decoration: underline;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin: 12px 0;
+  padding-left: 32px;
+}
+
+.markdown-content li {
+  margin: 6px 0;
+  line-height: 1.6;
+  padding-left: 8px;
+}
+
+.markdown-content ul {
+  list-style-type: disc;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+}
+
+/* Nested lists */
+.markdown-content li > ul,
+.markdown-content li > ol {
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+/* Inline Code */
+.markdown-inline-code {
+  background: #f1f5f9;
+  color: #e11d48;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+/* Code Block */
+.markdown-code-block {
+  margin: 16px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.code-language {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.copy-code-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.copy-code-btn:hover {
+  background: #e2e8f0;
+}
+
+.markdown-code-block pre {
+  margin: 0;
+  padding: 16px;
+  background: #1e293b;
+  overflow-x: auto;
+}
+
+.markdown-code-block code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e2e8f0;
+}
+
+/* Source References */
+.markdown-reference {
+  display: inline-block;
+  background: #ede9fe;
+  color: #667eea;
+  padding: 0px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-decoration: none;
+  margin: 0 2px;
+  transition: all 0.2s;
+}
+
+.markdown-reference:hover {
+  background: #ddd6fe;
+  color: #764ba2;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+/* Message Actions */
+.chat-message__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.chat-message__action-btn {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-message__action-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: scale(1.05);
+}
+
+.chat-message__action-btn--active {
+  background: #ede9fe;
+  border-color: #667eea;
+}
+
+/* ========================================
+   LAYOUT MODES & RESIZE FUNCTIONALITY
+   ======================================== */
+
+/* Sidebar Mode */
+.chatbot-window--sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  border-radius: 0;
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.15);
+  animation: slideInFromRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chatbot-window--sidebar .chatbot-header {
+  border-radius: 0;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Floating Mode (기본값) */
+.chatbot-window--floating {
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Resize Handles */
+.chatbot-resize-handle {
+  position: absolute;
+  z-index: 10;
+  background: transparent;
+  transition: background 0.2s;
+}
+
+/* Left resize handle (width adjustment) */
+.chatbot-resize-handle--left {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: ew-resize;
+}
+
+.chatbot-resize-handle--left:hover {
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.3) 0%, transparent 100%);
+}
+
+.chatbot-resize-handle--left::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 40px;
+  background: rgba(102, 126, 234, 0.5);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.chatbot-resize-handle--left:hover::before {
+  opacity: 1;
+}
+
+/* Top resize handle (height adjustment - floating only) */
+.chatbot-resize-handle--top {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 6px;
+  cursor: ns-resize;
+}
+
+.chatbot-resize-handle--top:hover {
+  background: linear-gradient(180deg, rgba(102, 126, 234, 0.3) 0%, transparent 100%);
+}
+
+.chatbot-resize-handle--top::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: rgba(102, 126, 234, 0.5);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.chatbot-resize-handle--top:hover::before {
+  opacity: 1;
+}
+
+/* Resizing state */
+.chatbot-window--resizing {
+  transition: none;
+  user-select: none;
+}
+
+.chatbot-window--resizing * {
+  pointer-events: none;
+}
+
+.chatbot-window--resizing .chatbot-resize-handle {
+  pointer-events: auto;
+}
+
+/* Body class when resizing (prevents text selection) */
+body.chatbot-resizing {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+body.chatbot-resizing * {
+  cursor: inherit !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chatbot-window--floating,
+  .chatbot-window--sidebar {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100% !important;
+    max-width: 100%;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0;
+  }
+
+  .chatbot-header {
+    border-radius: 0;
+  }
+
+  /* Hide resize handles on mobile */
+  .chatbot-resize-handle {
+    display: none;
+  }
+
+  .chatbot-toggle {
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Tablet: limit sidebar max width */
+  .chatbot-window--sidebar {
+    max-width: 600px;
+  }
+}
+
+/* Dark mode adjustments for layout modes */
+@media (prefers-color-scheme: dark) {
+  .chatbot-window--sidebar {
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .chatbot-window--floating {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .chatbot-resize-handle--left:hover {
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.4) 0%, transparent 100%);
+  }
+
+  .chatbot-resize-handle--top:hover {
+    background: linear-gradient(180deg, rgba(102, 126, 234, 0.4) 0%, transparent 100%);
+  }
+
+  .chatbot-resize-handle--left::before,
+  .chatbot-resize-handle--top::before {
+    background: rgba(102, 126, 234, 0.7);
+  }
+}
+
+/* ============================================
+   Dragging State
+   ============================================ */
+
+/* Disable transitions and selections during drag */
+.chatbot-window--dragging {
+  transition: none !important;
+  user-select: none;
+}
+
+/* Global cursor override during drag */
+body.chatbot-dragging {
+  user-select: none;
+  cursor: move !important;
+}
+
+body.chatbot-dragging * {
+  cursor: move !important;
+  user-select: none;
 }
