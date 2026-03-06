@@ -66,11 +66,11 @@ class VectorService:
             List of relevant documents with metadata
         """
         if not self.vectorstore:
-            print("⚠️  Vectorstore is None")
+            print("[WARNING]  Vectorstore is None")
             return []
 
         try:
-            print(f"🔍 Searching for: {query} (k={k}, threshold={score_threshold})")
+            print(f"[SEARCH] Searching for: {query} (k={k}, threshold={score_threshold})")
             if score_threshold:
                 docs = self.vectorstore.similarity_search_with_score(
                     query,
@@ -90,7 +90,7 @@ class VectorService:
                 return results
 
         except Exception as e:
-            print(f"❌ Search error: {e}")
+            print(f"[ERROR] Search error: {e}")
             import traceback
             traceback.print_exc()
             return []

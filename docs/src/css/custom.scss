@@ -109,6 +109,13 @@ main>div {
   padding-right: 5rem !important;
 }
 
+
+/* Sidebar positioning - account for navbar height */
+aside.theme-doc-sidebar-container,
+.theme-doc-sidebar-container {
+  padding-top: var(--ifm-navbar-height);
+}
+
 .badge {
   display: none;
 }
@@ -292,7 +299,6 @@ button[title="Switch between dark and light mode"] svg,
 .menu__link--active {
   background-color: rgba(99, 102, 241, 0.1);
   color: var(--ifm-color-primary);
-  font-weight: 600;
 }
 
 [data-theme='dark'] .menu__link--active {
@@ -307,7 +313,7 @@ button[title="Switch between dark and light mode"] svg,
   cursor: default;
   margin-top: calc(var(--ifm-spacing-vertical) * 1.5);
   font-weight: 700;
-  font-size: 0.75rem;
+  font-size:  0.875rem;
   letter-spacing: 0.05em;
   color: var(--ifm-font-color-secondary);
   text-transform: uppercase;
@@ -317,8 +323,25 @@ button[title="Switch between dark and light mode"] svg,
   }
 }
 
-.menu .menu__link.menu__link--sublist::after {
-  background: none;
+/* Collapsible category styling - More specific selectors */
+.menu>ul.menu__list>li.menu__list-item>div.menu__list-item-collapsible>a.menu__link--sublist {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+/* Arrow/Caret icon after category text - Smaller size */
+.menu>ul.menu__list>li.menu__list-item>div.menu__list-item-collapsible>a.menu__link--sublist::after {
+  background: none !important;
+  width: 0.6rem !important;
+  height: 0.6rem !important;
+  min-width: 0.6rem !important;
+  max-width: 0.6rem !important;
+  flex-shrink: 0 !important;
+  margin-left: 0.5rem !important;
+  transform: rotate(0deg) !important;
+  font-size: 0.6rem !important;
+  border-width: 0.1rem !important;
 }
 
 /* Search box styles - Local search plugin */

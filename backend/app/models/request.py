@@ -14,7 +14,7 @@ class ChatRequest(BaseModel):
         "json_schema_extra": {
             "examples": [
                 {
-                    "question": "Mozart의 hooks에 대해 알려주세요",
+                    "question": "Mozart[INFO] hooks[INFO] [INFO] [INFO]",
                     "conversation_history": []
                 }
             ]

@@ -1,34 +1,93 @@
-version: '3'
 services:
-
-  mysql:
-    image: "mysql:5.7.30"
-    # For MacBook with Apple chips, use the following platform instead.
-    # platform: linux/amd64
+  # Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: mozart-qdrant
     ports:
-      # Another version of MySQL is installed on the vm and already uses the port 3306.
-      - "3308:3306"
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./backend/qdrant_data:/qdrant/storage
     environment:
-      MYSQL_ROOT_PASSWORD: "admin"
-      MYSQL_USER: "test"
-      MYSQL_PASSWORD: "test"
-      MYSQL_DATABASE: "test"
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    restart: unless-stopped
+    networks:
+      - mozart-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:6333/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  postgres:
-    image: "postgres:9.6.18"
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: "test"
-      POSTGRES_PASSWORD: "test"
-      POSTGRES_DB: "test"
-
-  mongodb:
-    image: "mongo:4.0.18"
-    ports:
-      - "27017:27017"
-
+  # Redis Cache
   redis:
-    image: "redis:4.0.14"
+    image: redis:7-alpine
+    container_name: mozart-redis
     ports:
-      - "6380:6379"
+      - "6379:6379"
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    networks:
+      - mozart-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mozart-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount code for hot reload in development
+      - ./backend/app:/app/app
+      - ./docs/docs:/app/docs
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - REDIS_URL=redis://redis:6379
+      - DOCS_PATH=/app/docs
+      - PYTHONUNBUFFERED=1
+      - PYTHONIOENCODING=utf-8
+    env_file:
+      - ./backend/.env
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - mozart-network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Frontend Docs
+  frontend:
+    build:
+      context: ./docs
+      dockerfile: Dockerfile
+    container_name: mozart-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount code for hot reload in development
+      - ./docs:/app
+      - /app/node_modules
+      - /app/.docusaurus
+    environment:
+      - CHATBOT_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - mozart-network
+    stdin_open: true
+    tty: true
+
+networks:
+  mozart-network:
+    driver: bridge

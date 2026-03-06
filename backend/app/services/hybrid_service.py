@@ -70,7 +70,7 @@ class HybridRAGMCP:
         if not file_paths:
             # No relevant documents found
             return {
-                "answer": "죄송합니다. 관련된 문서를 찾을 수 없습니다. 다른 질문을 해주세요.",
+                "answer": "죄송합니다. 질문과 관련된 문서를 찾을 수 없습니다. 다른 키워드로 질문해 주시겠어요?",
                 "sources": [],
                 "cached": False,
                 "tokens_used": 0
@@ -91,7 +91,7 @@ class HybridRAGMCP:
 
         if not documents:
             return {
-                "answer": "죄송합니다. 문서를 읽는 중 오류가 발생했습니다.",
+                "answer": "문서를 읽는 중 오류가 발생했습니다. 다시 시도해 주세요.",
                 "sources": [],
                 "cached": False,
                 "tokens_used": 0
@@ -134,7 +134,7 @@ class HybridRAGMCP:
             return await self._generate_with_claude(question, documents, conversation_history)
         else:
             return {
-                "answer": "지원되지 않는 LLM 제공자입니다.",
+                "answer": "지원하지 않는 LLM 제공자입니다.",
                 "sources": [],
                 "cached": False,
                 "tokens_used": 0
@@ -166,7 +166,7 @@ class HybridRAGMCP:
         # Add current question with context
         messages.append({
             "role": "user",
-            "content": f"""다음 문서를 참고하여 질문에 답변해주세요.
+            "content": f"""아래 문서들을 참고하여 질문에 답변해주세요.
 
 질문: {question}
 
@@ -196,7 +196,7 @@ class HybridRAGMCP:
         except Exception as e:
             print(f"OpenAI API error: {e}")
             return {
-                "answer": f"죄송합니다. 답변 생성 중 오류가 발생했습니다: {str(e)}",
+                "answer": f"답변 생성 중 오류가 발생했습니다. API 키를 확인해주세요.\n오류 내용: {str(e)}",
                 "sources": [],
                 "cached": False,
                 "tokens_used": 0
@@ -216,7 +216,7 @@ class HybridRAGMCP:
         messages = conversation_history or []
         messages.append({
             "role": "user",
-            "content": f"""다음 문서를 참고하여 질문에 답변해주세요.
+            "content": f"""아래 문서들을 참고하여 질문에 답변해주세요.
 
 질문: {question}
 
@@ -246,7 +246,7 @@ class HybridRAGMCP:
         except Exception as e:
             print(f"Claude API error: {e}")
             return {
-                "answer": f"죄송합니다. 답변 생성 중 오류가 발생했습니다: {str(e)}",
+                "answer": f"답변 생성 중 오류가 발생했습니다. API 키를 확인해주세요.\n오류 내용: {str(e)}",
                 "sources": [],
                 "cached": False,
                 "tokens_used": 0
@@ -320,7 +320,7 @@ class HybridRAGMCP:
         relative_path = "/".join(encoded_segments)
 
         # Build full URL - use localhost for dev, can be configured for production
-        base_url = "http://localhost:3000/docs"
+        base_url = "http://localhost:3000"
 
         if relative_path:
             return f"{base_url}/{relative_path}"
@@ -329,11 +329,11 @@ class HybridRAGMCP:
 
     def _extract_title_from_url(self, url: str) -> str:
         """Extract clean title from documentation URL"""
-        if not url or url == "http://localhost:3000/docs":
+        if not url or url == "http://localhost:3000":
             return "Home"
 
         # Remove base URL
-        path = url.replace("http://localhost:3000/docs/", "")
+        path = url.replace("http://localhost:3000/", "")
 
         # URL decode the path to convert %20 back to spaces
         from urllib.parse import unquote
@@ -368,12 +368,12 @@ class HybridRAGMCP:
 
     def _get_system_prompt(self) -> str:
         """Get system prompt for LLM"""
-        return """당신은 Mozart 프레임워크 문서 전문가입니다.
+        return """당신은 Mozart 문서의 전문 도우미입니다. 사용자의 질문에 친절하고 정확하게 답변해주세요.
 
-답변 시 주의사항:
-1. 제공된 문서의 내용만을 바탕으로 정확하게 답변하세요
-2. 문서에 없는 내용은 추측하지 말고, "문서에서 해당 정보를 찾을 수 없습니다"라고 답변하세요
-3. 코드 예제가 있다면 마크다운 코드 블록으로 표시하세요
-4. 명확하고 친절한 한국어로 답변하세요
-5. 필요한 경우 단계별로 설명하세요
-6. 가능한 간결하면서도 충분한 정보를 제공하세요"""
+답변 가이드라인:
+1. 제공된 문서 내용을 기반으로 정확하게 답변하세요
+2. 문서에 없는 내용은 추측하지 말고, "문서에서 해당 정보를 찾을 수 없습니다"라고 알려주세요
+3. 답변은 명확하고 이해하기 쉽게 구조화하세요
+4. 필요한 경우 예시나 코드를 포함하세요
+5. 한국어로 답변하되, 기술 용어는 영문을 병기하세요
+6. 친절하고 전문적인 톤을 유지하세요"""

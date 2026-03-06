@@ -88,13 +88,23 @@ export function Chatbot() {
 
     const startX = e.clientX;
     const startWidth = chatbotWidth;
+    const startPosX = positionX ?? (window.innerWidth - chatbotWidth - 24);
+
+    // Calculate the right edge position (fixed point)
+    const rightEdge = startPosX + startWidth;
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
-      const deltaX = startX - moveEvent.clientX;
-      const newWidth = startWidth + deltaX;
+      const deltaX = moveEvent.clientX - startX;
+      const newPosX = startPosX + deltaX;
+      const newWidth = rightEdge - newPosX;
       const maxWidth = layoutMode === 'floating' ? MAX_WIDTH_FLOATING : MAX_WIDTH_SIDEBAR;
 
-      setChatbotWidth(clamp(newWidth, MIN_WIDTH, maxWidth));
+      // Clamp width and adjust position accordingly
+      const clampedWidth = clamp(newWidth, MIN_WIDTH, maxWidth);
+      const adjustedPosX = rightEdge - clampedWidth;
+
+      setChatbotWidth(clampedWidth);
+      setPositionX(adjustedPosX);
     };
 
     const handleMouseUp = () => {
@@ -116,13 +126,23 @@ export function Chatbot() {
 
     const startY = e.clientY;
     const startHeight = chatbotHeight;
+    const startPosY = positionY ?? (window.innerHeight - chatbotHeight - 96);
+
+    // Calculate the bottom edge position (fixed point)
+    const bottomEdge = startPosY + startHeight;
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
-      const deltaY = startY - moveEvent.clientY;
-      const newHeight = startHeight + deltaY;
+      const deltaY = moveEvent.clientY - startY;
+      const newPosY = startPosY + deltaY;
+      const newHeight = bottomEdge - newPosY;
       const maxHeight = window.innerHeight - 140;
 
-      setChatbotHeight(clamp(newHeight, MIN_HEIGHT, maxHeight));
+      // Clamp height and adjust position accordingly
+      const clampedHeight = clamp(newHeight, MIN_HEIGHT, maxHeight);
+      const adjustedPosY = bottomEdge - clampedHeight;
+
+      setChatbotHeight(clampedHeight);
+      setPositionY(adjustedPosY);
     };
 
     const handleMouseUp = () => {
@@ -187,6 +207,91 @@ export function Chatbot() {
     document.addEventListener('mouseup', handleMouseUp);
     document.body.classList.add('chatbot-dragging');
   };
+
+  // Adjust position when window is opened or viewport changes
+  useEffect(() => {
+    if (!isOpen || layoutMode !== 'floating') return;
+
+    const adjustPosition = () => {
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      // Calculate safe boundaries
+      const safeMargin = 24;
+      const bottomMargin = 96; // Space for toggle button
+
+      // Calculate default position if no custom position is set
+      if (positionX === null || positionY === null) {
+        const defaultX = Math.max(safeMargin, viewportWidth - chatbotWidth - safeMargin);
+        const defaultY = Math.max(safeMargin, viewportHeight - chatbotHeight - bottomMargin);
+
+        // Check if default position fits in viewport
+        if (viewportHeight < chatbotHeight + bottomMargin + safeMargin) {
+          // Screen too small for default height, adjust
+          const adjustedHeight = Math.max(MIN_HEIGHT, viewportHeight - bottomMargin - safeMargin * 2);
+          setChatbotHeight(adjustedHeight);
+          setPositionY(safeMargin);
+        } else {
+          setPositionY(defaultY);
+        }
+
+        if (viewportWidth < chatbotWidth + safeMargin * 2) {
+          // Screen too narrow, adjust width
+          const adjustedWidth = Math.max(MIN_WIDTH, viewportWidth - safeMargin * 2);
+          setChatbotWidth(adjustedWidth);
+          setPositionX(safeMargin);
+        } else {
+          setPositionX(defaultX);
+        }
+        return;
+      }
+
+      // Adjust existing position if it's out of bounds
+      let newX = positionX;
+      let newY = positionY;
+      let needsUpdate = false;
+
+      // Check if chatbot extends beyond right edge
+      if (positionX + chatbotWidth > viewportWidth) {
+        newX = Math.max(safeMargin, viewportWidth - chatbotWidth - safeMargin);
+        needsUpdate = true;
+      }
+
+      // Check if chatbot extends beyond left edge
+      if (positionX < safeMargin) {
+        newX = safeMargin;
+        needsUpdate = true;
+      }
+
+      // Check if chatbot extends beyond bottom edge
+      if (positionY + chatbotHeight > viewportHeight) {
+        newY = Math.max(safeMargin, viewportHeight - chatbotHeight - safeMargin);
+        needsUpdate = true;
+      }
+
+      // Check if chatbot extends beyond top edge
+      if (positionY < safeMargin) {
+        newY = safeMargin;
+        needsUpdate = true;
+      }
+
+      if (needsUpdate) {
+        setPositionX(newX);
+        setPositionY(newY);
+      }
+    };
+
+    // Adjust position on open and when dimensions change
+    adjustPosition();
+
+    // Handle window resize
+    const handleResize = () => {
+      adjustPosition();
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen, layoutMode, chatbotWidth, chatbotHeight, positionX, positionY]);
 
   // Scroll to bottom when new message arrives
   useEffect(() => {

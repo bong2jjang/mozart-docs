@@ -20,12 +20,12 @@ class ChatResponse(BaseModel):
         "json_schema_extra": {
             "examples": [
                 {
-                    "answer": "Mozart의 hooks는...",
+                    "answer": "Mozart[INFO] hooks[INFO]...",
                     "sources": [
                         {
                             "file": "aps/architecture/hooks - 2.md",
                             "title": "Hooks",
-                            "content_preview": "Hooks는 특정 시점에...",
+                            "content_preview": "Hooks[INFO] [INFO] [INFO]...",
                             "relevance_score": 0.95
                         }
                     ],

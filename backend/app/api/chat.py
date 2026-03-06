@@ -22,10 +22,11 @@ def create_chat_router(get_hybrid_service):
             Answer with sources and metadata
         """
         try:
-            print(f"📩 Received question: {request.question}")
+            print(f"[INFO] Received question: {request.question}")
 
             # Get current service instance
             hybrid_service = get_hybrid_service()
+            print(f'[DEBUG] hybrid_service type: {type(hybrid_service)}, value: {hybrid_service}')
 
             if not hybrid_service:
                 raise ValueError("Hybrid service not initialized")
@@ -35,7 +36,7 @@ def create_chat_router(get_hybrid_service):
                 conversation_history=request.conversation_history
             )
 
-            print(f"✅ Result: {result}")
+            print(f"[OK] Result: {result}")
 
             if not result:
                 raise ValueError("Result is None")
@@ -46,7 +47,7 @@ def create_chat_router(get_hybrid_service):
             return ChatResponse(**result)
 
         except Exception as e:
-            print(f"❌ Error in chat endpoint: {type(e).__name__}: {str(e)}")
+            print(f"[ERROR] Error in chat endpoint: {type(e).__name__}: {str(e)}")
             import traceback
             traceback.print_exc()
             raise HTTPException(

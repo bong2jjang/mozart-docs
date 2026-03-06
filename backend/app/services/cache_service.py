@@ -26,9 +26,9 @@ class CacheService:
             )
             # Test connection
             self.redis_client.ping()
-            print("✅ Redis connection successful")
+            print("[OK] Redis connection successful")
         except Exception as e:
-            print(f"⚠️  Redis connection failed: {e}")
+            print(f"[WARNING]  Redis connection failed: {e}")
             print("   Cache will be disabled")
 
     def _hash_key(self, text: str) -> str:
@@ -127,7 +127,7 @@ class CacheService:
             # Delete all answer keys
             for key in self.redis_client.scan_iter("answer:*"):
                 self.redis_client.delete(key)
-            print("✅ Cache cleared")
+            print("[OK] Cache cleared")
         except Exception as e:
             print(f"Cache clear error: {e}")
 

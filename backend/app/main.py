@@ -25,25 +25,25 @@ async def lifespan(app: FastAPI):
     """Application lifespan - initialize services on startup"""
     global vector_service, cache_service, mcp_server, hybrid_service
 
-    print("🚀 Starting Mozart Docs Chatbot Backend...")
+    print("[START] Starting Mozart Docs Chatbot Backend...")
 
     # Initialize services
     try:
         # Vector service
-        print("📊 Initializing vector service...")
+        print("[VECTOR] Initializing vector service...")
         vector_service = VectorService(config)
         vector_service.initialize_vectorstore()
 
         # Cache service
-        print("💾 Initializing cache service...")
+        print("[CACHE] Initializing cache service...")
         cache_service = CacheService(config)
 
         # MCP server
-        print("📁 Initializing MCP filesystem server...")
+        print("[MCP] Initializing MCP filesystem server...")
         mcp_server = MCPFilesystemServer(config.documents.path)
 
         # Hybrid service
-        print("🤖 Initializing hybrid RAG+MCP service...")
+        print("[HYBRID] Initializing hybrid RAG+MCP service...")
         hybrid_service = HybridRAGMCP(
             config,
             vector_service,
@@ -51,16 +51,16 @@ async def lifespan(app: FastAPI):
             mcp_server
         )
 
-        print("✅ All services initialized successfully!")
+        print("[OK] All services initialized successfully!")
 
     except Exception as e:
-        print(f"❌ Initialization error: {e}")
+        print(f"[ERROR] Initialization error: {e}")
         raise
 
     yield
 
     # Cleanup
-    print("👋 Shutting down...")
+    print("[SHUTDOWN] Shutting down...")
 
 
 # Create FastAPI app
