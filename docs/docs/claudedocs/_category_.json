@@ -1,0 +1,8 @@
+{
+  "label": "Claude Docs",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Mozart APS 테이블 스키마 문서"
+  }
+}
