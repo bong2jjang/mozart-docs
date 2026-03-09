@@ -22,6 +22,15 @@ export function useChatbot() {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const messages = JSON.parse(stored);
+        // Clean up messages with broken code block placeholders from old parser
+        const hasCorruptedMessages = messages.some(
+          (msg: Message) => /(?:__CODE_BLOCK_\d+__|CODE_BLOCK_\d+)/.test(msg.content)
+        );
+        if (hasCorruptedMessages) {
+          console.warn('Clearing corrupted chat history with broken code block placeholders');
+          localStorage.removeItem(STORAGE_KEY);
+          return;
+        }
         setState((prev) => ({ ...prev, messages }));
       }
     } catch (error) {

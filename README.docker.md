@@ -24,19 +24,23 @@ cp .env.example .env
 
 ### 2. 서비스 시작
 
-**Windows:**
-```cmd
-start-dev.bat
-```
-
-**Linux/Mac:**
+**NPM 스크립트 사용 (권장):**
 ```bash
-./start-dev.sh
+# 프로젝트 루트에서
+npm run dev        # 개발 모드 (로그 출력)
+npm run start      # 백그라운드 실행
 ```
 
 **또는 직접 실행:**
 ```bash
-docker-compose up -d
+docker-compose up --build  # 개발 모드
+docker-compose up -d       # 백그라운드
+```
+
+**또는 스크립트 파일 사용:**
+```cmd
+start-dev.bat    # Windows
+./start-dev.sh   # Linux/Mac
 ```
 
 ### 3. 접속
@@ -69,7 +73,21 @@ docker-compose up -d
 
 ## 주요 명령어
 
-### 서비스 관리
+### NPM 스크립트 (권장)
+
+```bash
+npm run dev              # 개발 모드 (로그 출력)
+npm run start            # 백그라운드 실행
+npm run stop             # 서비스 중지
+npm run restart          # 서비스 재시작
+npm run logs             # 전체 로그 확인
+npm run logs:backend     # 백엔드 로그만
+npm run logs:frontend    # 프론트엔드 로그만
+npm run build            # Docker 이미지 빌드
+npm run clean            # 완전 초기화 (볼륨 삭제)
+```
+
+### Docker Compose 직접 사용
 
 ```bash
 # 전체 서비스 시작

@@ -173,7 +173,7 @@
 }
 
 .chat-message__bubble {
-  max-width: 80%;
+  max-width: 95%;
   padding: 12px 16px;
   border-radius: 16px;
   position: relative;
@@ -195,8 +195,12 @@
 .chat-message__content {
   font-size: 14px;
   line-height: 1.6;
-  white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+/* User messages only: preserve whitespace for plain text */
+.chat-message--user .chat-message__content {
+  white-space: pre-wrap;
 }
 
 .chat-message__time {
@@ -511,32 +515,80 @@
   }
 }
 
-/* Markdown Content Styles */
+/* Markdown Content Styles - Reset all Docusaurus/infima globals */
 .markdown-content {
-  line-height: 1.7;
+  line-height: 1.5;
+  white-space: normal;
+  font-size: 14px;
 }
 
+/* Full reset for all block elements inside markdown-content
+   to prevent Docusaurus infima CSS from adding extra spacing */
+.markdown-content p,
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6,
+.markdown-content ul,
+.markdown-content ol,
+.markdown-content li,
+.markdown-content blockquote,
+.markdown-content pre,
+.markdown-content div {
+  margin: 0;
+  padding: 0;
+  --ifm-paragraph-margin-bottom: 0;
+  --ifm-leading: 0;
+  --ifm-list-margin: 0;
+  --ifm-list-left-padding: 0;
+}
+
+/* Paragraph spacing */
+.markdown-content p {
+  margin: 0 0 4px 0;
+  line-height: 1.5;
+}
+
+.markdown-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Headers */
 .markdown-content h1 {
-  font-size: 1.5em;
+  font-size: 1.3em;
   font-weight: 700;
-  margin: 16px 0 12px 0;
+  margin: 8px 0 4px 0;
   color: #1e293b;
   border-bottom: 2px solid #e2e8f0;
-  padding-bottom: 8px;
+  padding-bottom: 4px;
+}
+
+.markdown-content h1:first-child {
+  margin-top: 0;
 }
 
 .markdown-content h2 {
-  font-size: 1.3em;
+  font-size: 1.2em;
   font-weight: 600;
-  margin: 14px 0 10px 0;
+  margin: 8px 0 3px 0;
   color: #334155;
+}
+
+.markdown-content h2:first-child {
+  margin-top: 0;
 }
 
 .markdown-content h3 {
   font-size: 1.1em;
   font-weight: 600;
-  margin: 12px 0 8px 0;
+  margin: 6px 0 2px 0;
   color: #475569;
+}
+
+.markdown-content h3:first-child {
+  margin-top: 0;
 }
 
 .markdown-content strong {
@@ -560,16 +612,27 @@
   text-decoration: underline;
 }
 
+/* Lists */
 .markdown-content ul,
 .markdown-content ol {
-  margin: 12px 0;
-  padding-left: 32px;
+  margin: 2px 0;
+  padding-left: 22px;
+}
+
+.markdown-content ul:first-child,
+.markdown-content ol:first-child {
+  margin-top: 0;
+}
+
+.markdown-content ul:last-child,
+.markdown-content ol:last-child {
+  margin-bottom: 0;
 }
 
 .markdown-content li {
-  margin: 6px 0;
-  line-height: 1.6;
-  padding-left: 8px;
+  margin: 1px 0;
+  line-height: 1.45;
+  padding-left: 2px;
 }
 
 .markdown-content ul {
@@ -583,8 +646,8 @@
 /* Nested lists */
 .markdown-content li > ul,
 .markdown-content li > ol {
-  margin-top: 8px;
-  margin-bottom: 4px;
+  margin-top: 2px;
+  margin-bottom: 0;
 }
 
 /* Inline Code */
@@ -599,11 +662,20 @@
 }
 
 /* Code Block */
+.markdown-content .markdown-code-block,
 .markdown-code-block {
-  margin: 16px 0;
+  margin: 8px 0;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.markdown-code-block:first-child {
+  margin-top: 0;
+}
+
+.markdown-code-block:last-child {
+  margin-bottom: 0;
 }
 
 .code-header {
@@ -638,8 +710,8 @@
 }
 
 .markdown-code-block pre {
-  margin: 0;
-  padding: 16px;
+  margin: 0 !important;
+  padding: 16px !important;
   background: #1e293b;
   overflow-x: auto;
 }

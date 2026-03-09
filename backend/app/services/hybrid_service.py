@@ -80,9 +80,11 @@ class HybridRAGMCP:
         documents = []
         for path in file_paths:
             try:
-                content = self.mcp_server.read_file(path)
+                # Convert absolute path to relative path for MCP server
+                relative_path = self._convert_to_relative_path(path)
+                content = self.mcp_server.read_file(relative_path)
                 documents.append({
-                    "path": path,
+                    "path": path,  # Keep original path for URL generation
                     "content": content[:3000]  # Limit to 3000 chars to save tokens
                 })
             except Exception as e:
@@ -100,14 +102,50 @@ class HybridRAGMCP:
         # Step 4: LLM - Generate answer
         result = await self._generate_answer(question, documents, conversation_history)
 
-        # Step 5: Cache result
+        # Step 5: Filter sources if LLM indicates no relevant info found
+        if self._is_no_answer(result["answer"]):
+            result["sources"] = []
+
+        # Step 6: Cache result
         self.cache_service.set(
             question,
             result["answer"],
-            sources=[{"file": doc["path"]} for doc in documents]
+            sources=[{"file": doc["path"]} for doc in documents] if result["sources"] else []
         )
 
         return result
+
+    def _convert_to_relative_path(self, path: str) -> str:
+        r"""
+        Convert absolute/full path to relative path for MCP server
+
+        Examples:
+            D:\Github\mozart-docs\docs\docs\aps\README.md -> aps/README.md
+            /app/docs/aps/README.md -> aps/README.md
+            docs/aps/README.md -> aps/README.md
+        """
+        # Normalize path separators
+        path = path.replace("\\", "/")
+
+        # Remove common prefixes
+        prefixes_to_remove = [
+            "D:/Github/mozart-docs/docs/docs/",
+            "/app/docs/",
+            "docs/docs/",
+            "docs/",
+        ]
+
+        for prefix in prefixes_to_remove:
+            if path.startswith(prefix):
+                return path[len(prefix):]
+
+        # If path contains "docs/", extract everything after the last "docs/"
+        if "/docs/" in path:
+            parts = path.split("/docs/")
+            return parts[-1]
+
+        # Return as-is if no known prefix found
+        return path
 
     def _determine_top_k(self, question: str) -> int:
         """Determine number of documents to retrieve based on question complexity"""
@@ -291,18 +329,8 @@ class HybridRAGMCP:
         if not path:
             return ""
 
-        # Get docs base path from config
-        docs_base = self.config.documents.path.replace("\\", "/")
-
-        # Convert Windows path to forward slashes
-        path = path.replace("\\", "/")
-
-        # Remove base docs path
-        if docs_base in path:
-            relative_path = path.replace(docs_base, "").lstrip("/")
-        else:
-            # Fallback: just use the path as-is
-            relative_path = path
+        # First convert to relative path (handles both Windows and Docker paths)
+        relative_path = self._convert_to_relative_path(path)
 
         # Remove file extension
         relative_path = relative_path.replace(".md", "").replace(".mdx", "")
@@ -313,11 +341,12 @@ class HybridRAGMCP:
         elif relative_path == "README":
             relative_path = ""
 
-        # URL encode each path segment (handles spaces as %20, etc.)
+        # URL encode each path segment (handles spaces, Korean characters, etc.)
         from urllib.parse import quote
-        path_segments = relative_path.split("/")
-        encoded_segments = [quote(segment) for segment in path_segments]
-        relative_path = "/".join(encoded_segments)
+        if relative_path:
+            path_segments = relative_path.split("/")
+            encoded_segments = [quote(segment) for segment in path_segments]
+            relative_path = "/".join(encoded_segments)
 
         # Build full URL - use localhost for dev, can be configured for production
         base_url = "http://localhost:3000"
@@ -365,6 +394,22 @@ class HybridRAGMCP:
 
         # Capitalize words
         return " ".join(word.capitalize() for word in filename.split("-"))
+
+    def _is_no_answer(self, answer: str) -> bool:
+        """Check if the LLM answer indicates it couldn't find relevant information"""
+        no_answer_phrases = [
+            "찾을 수 없습니다",
+            "찾을 수 없었습니다",
+            "관련된 문서를 찾을 수 없",
+            "해당 정보를 찾을 수 없",
+            "문서에서 찾을 수 없",
+            "관련 정보가 없",
+            "정보를 제공할 수 없",
+            "문서에 포함되어 있지 않",
+            "다루고 있지 않",
+            "제공된 문서들에서 찾을 수 없",
+        ]
+        return any(phrase in answer for phrase in no_answer_phrases)
 
     def _get_system_prompt(self) -> str:
         """Get system prompt for LLM"""
