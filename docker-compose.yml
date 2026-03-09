@@ -78,8 +78,6 @@ services:
       - ./docs:/app
       - /app/node_modules
       - /app/.docusaurus
-    environment:
-      - CHATBOT_API_URL=http://localhost:8000
     depends_on:
       - backend
     restart: unless-stopped

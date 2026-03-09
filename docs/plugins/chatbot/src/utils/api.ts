@@ -3,11 +3,14 @@
  */
 import type { ChatRequest, ChatResponse } from '../types';
 
-// Get API URL from window object (set by Docusaurus) or use default
+// Dynamically resolve API URL based on current browser hostname
+// This allows access from any device on the same network
 const API_BASE_URL =
   typeof window !== 'undefined' && (window as any).CHATBOT_API_URL
     ? (window as any).CHATBOT_API_URL
-    : 'http://localhost:8000';
+    : typeof window !== 'undefined'
+      ? `${window.location.protocol}//${window.location.hostname}:8000`
+      : 'http://localhost:8000';
 
 export class ChatbotAPI {
   private baseUrl: string;

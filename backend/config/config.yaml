@@ -48,5 +48,4 @@ server:
   host: "${HOST}"
   port: "${PORT}"
   cors_origins:
-    - "http://localhost:3000"
-    - "http://localhost:8000"
+    - "*"
