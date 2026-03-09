@@ -40,15 +40,7 @@ $section-padding-x: 60px;
 
 $max-content-width: 1280px;
 
-@media (max-width: $medium-screen) {
-  $section-padding-y: 50px;
-  $small-section-padding-y: 40px;
-}
-
-@media (min-width: $large-screen) {
-  $section-padding-y: 100px;
-  $small-section-padding-y: 70px;
-}
+/* Note: section padding responsive overrides are handled inside @mixin section/smallSection */
 
 /*
  * Fonts
@@ -108,6 +100,8 @@ $max-content-width: 1280px;
 @media (max-width: $small-screen) {
   .btn {
     display: inline-block;
+    font-size: 0.95rem;
+    padding: 0.6rem 1.25rem;
   }
 
   .btnSecondary {
@@ -123,6 +117,16 @@ $max-content-width: 1280px;
   height: auto;
   min-height: 500px;
   padding: 6rem 2rem;
+
+  @media (max-width: $medium-screen) {
+    min-height: 400px;
+    padding: 4rem 1.5rem;
+  }
+
+  @media (max-width: $small-screen) {
+    min-height: 350px;
+    padding: 3rem 1rem;
+  }
 
   @media (min-width: $large-screen) {
     min-height: 570px;
@@ -254,10 +258,26 @@ $max-content-width: 1280px;
     max-width: $max-content-width;
     margin: auto;
   }
+
+  @media (max-width: $medium-screen) {
+    padding: 50px 1.5rem;
+  }
+
+  @media (max-width: $small-screen) {
+    padding: 40px 1rem;
+  }
 }
 
 @mixin smallSection {
   padding: $small-section-padding-y $section-padding-x;
+
+  @media (max-width: $medium-screen) {
+    padding: 40px 1.5rem;
+  }
+
+  @media (max-width: $small-screen) {
+    padding: 30px 1rem;
+  }
 }
 
 .allInOneSection {
@@ -602,12 +622,30 @@ $max-content-width: 1280px;
   font-weight: 700;
   margin-bottom: 3rem;
   color: #1f2937;
+
+  @media (max-width: $medium-screen) {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: $small-screen) {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
 }
 
 /* Services Section */
 .servicesSection {
   padding: 5rem 0;
   background-color: $bg-white;
+
+  @media (max-width: $medium-screen) {
+    padding: 3rem 1.5rem;
+  }
+
+  @media (max-width: $small-screen) {
+    padding: 2.5rem 1rem;
+  }
 }
 
 .featuresGrid {
@@ -615,6 +653,12 @@ $max-content-width: 1280px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   margin-top: 3rem;
+
+  @media (max-width: $small-screen) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
 }
 
 .featureCard {
@@ -652,6 +696,14 @@ $max-content-width: 1280px;
 .platformSection,
 .platformSectionAlt {
   padding: 5rem 0;
+
+  @media (max-width: $medium-screen) {
+    padding: 3rem 1.5rem;
+  }
+
+  @media (max-width: $small-screen) {
+    padding: 2.5rem 1rem;
+  }
 }
 
 .platformSection {
@@ -754,6 +806,11 @@ $max-content-width: 1280px;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
   margin-top: 3rem;
+
+  @media (max-width: $small-screen) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 .advantageCard {
@@ -806,6 +863,27 @@ $max-content-width: 1280px;
     color: #6b7280;
     margin-bottom: 2.5rem;
   }
+
+  @media (max-width: $medium-screen) {
+    padding: 3rem 1.5rem;
+
+    h2 {
+      font-size: 2rem;
+    }
+  }
+
+  @media (max-width: $small-screen) {
+    padding: 2.5rem 1rem;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+  }
 }
 
 /* Footer */
@@ -819,6 +897,11 @@ $max-content-width: 1280px;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 3rem;
     margin-bottom: 3rem;
+
+    @media (max-width: $small-screen) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
   }
 
   .footerSection {

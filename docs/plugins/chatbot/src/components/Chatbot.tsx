@@ -46,6 +46,38 @@ export function Chatbot() {
   const [positionY, setPositionY] = useState<number | null>(null);
   const [isResizing, setIsResizing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState<number | null>(null);
+  const chatbotWindowRef = useRef<HTMLDivElement>(null);
+
+  // Track visual viewport for mobile keyboard handling
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.visualViewport) return;
+
+    const handleViewportResize = () => {
+      const vv = window.visualViewport!;
+      // Only apply on mobile-width screens
+      if (window.innerWidth <= 768) {
+        setViewportHeight(vv.height);
+        // Scroll the chatbot window into view when keyboard opens
+        if (chatbotWindowRef.current) {
+          chatbotWindowRef.current.style.height = `${vv.height - vv.offsetTop}px`;
+        }
+      } else {
+        setViewportHeight(null);
+        if (chatbotWindowRef.current) {
+          chatbotWindowRef.current.style.height = '';
+        }
+      }
+    };
+
+    window.visualViewport.addEventListener('resize', handleViewportResize);
+    window.visualViewport.addEventListener('scroll', handleViewportResize);
+
+    return () => {
+      window.visualViewport?.removeEventListener('resize', handleViewportResize);
+      window.visualViewport?.removeEventListener('scroll', handleViewportResize);
+    };
+  }, [isOpen]);
 
   // Load layout from localStorage
   useEffect(() => {
@@ -362,6 +394,7 @@ export function Chatbot() {
       {/* Chatbot Window */}
       {isOpen && (
         <div
+          ref={chatbotWindowRef}
           className={`chatbot-window chatbot-window--${layoutMode} ${isResizing ? 'chatbot-window--resizing' : ''} ${isDragging ? 'chatbot-window--dragging' : ''}`}
           style={{
             width: `${chatbotWidth}px`,
