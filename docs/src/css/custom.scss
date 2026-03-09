@@ -305,43 +305,56 @@ button[title="Switch between dark and light mode"] svg,
   background-color: rgba(129, 140, 248, 0.15);
 }
 
-.menu>ul.menu__list>li.menu__list-item>div.menu__list-item-collapsible:hover {
-  background: none;
+/* Top-level category collapsible container */
+.menu > ul.menu__list > li.menu__list-item > div.menu__list-item-collapsible {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center !important;
+  min-height: 0;
+  padding: 0;
+  margin-top: 0.75rem;
+
+  &:hover {
+    background: none !important;
+  }
+
+  /* Collapse toggle button (caret) - compact */
+  .menu__caret {
+    padding: 0.15rem 0.25rem;
+
+    &::before {
+      width: 1rem;
+      height: 1rem;
+      min-width: 1rem;
+    }
+  }
 }
 
-.menu>ul.menu__list>li.menu__list-item>div.menu__list-item-collapsible>a.menu__link--sublist:first-child {
+/* Top-level category label text */
+.menu > ul.menu__list > li.menu__list-item > div.menu__list-item-collapsible > a.menu__link--sublist {
   cursor: default;
-  margin-top: calc(var(--ifm-spacing-vertical) * 1.5);
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.2rem 0.4rem !important;
+  margin-top: 0 !important;
   font-weight: 700;
-  font-size:  0.875rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
   letter-spacing: 0.05em;
   color: var(--ifm-font-color-secondary);
   text-transform: uppercase;
 
-  :hover {
+  &:hover {
     background: none !important;
   }
 }
 
-/* Collapsible category styling - More specific selectors */
-.menu>ul.menu__list>li.menu__list-item>div.menu__list-item-collapsible>a.menu__link--sublist {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-}
-
-/* Arrow/Caret icon after category text - Smaller size */
-.menu>ul.menu__list>li.menu__list-item>div.menu__list-item-collapsible>a.menu__link--sublist::after {
-  background: none !important;
-  width: 0.6rem !important;
-  height: 0.6rem !important;
-  min-width: 0.6rem !important;
-  max-width: 0.6rem !important;
-  flex-shrink: 0 !important;
-  margin-left: 0.5rem !important;
-  transform: rotate(0deg) !important;
-  font-size: 0.6rem !important;
-  border-width: 0.1rem !important;
+/* Arrow/Caret icon after category text (for --sublist-caret variant) */
+.menu > ul.menu__list > li.menu__list-item > div.menu__list-item-collapsible > a.menu__link--sublist::after {
+  width: 1rem !important;
+  height: 1rem !important;
+  min-width: 1rem !important;
+  margin-left: auto !important;
 }
 
 /* Search box styles - Local search plugin */
