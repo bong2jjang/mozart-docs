@@ -348,21 +348,19 @@ class HybridRAGMCP:
             encoded_segments = [quote(segment) for segment in path_segments]
             relative_path = "/".join(encoded_segments)
 
-        # Build full URL - use localhost for dev, can be configured for production
-        base_url = "http://localhost:3000"
-
+        # Return relative path only (frontend will resolve with its own origin)
         if relative_path:
-            return f"{base_url}/{relative_path}"
+            return f"/{relative_path}"
         else:
-            return base_url
+            return "/"
 
     def _extract_title_from_url(self, url: str) -> str:
         """Extract clean title from documentation URL"""
-        if not url or url == "http://localhost:3000":
+        if not url or url == "/":
             return "Home"
 
-        # Remove base URL
-        path = url.replace("http://localhost:3000/", "")
+        # Remove leading slash
+        path = url.lstrip("/")
 
         # URL decode the path to convert %20 back to spaces
         from urllib.parse import unquote
