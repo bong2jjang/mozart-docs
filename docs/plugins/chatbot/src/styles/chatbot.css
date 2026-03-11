@@ -492,7 +492,7 @@
   }
 }
 
-/* Dark mode support */
+/* Dark mode support - System preference */
 @media (prefers-color-scheme: dark) {
   .chatbot-window {
     background: #1e293b;
@@ -559,6 +559,73 @@
   .markdown-reference:hover {
     background: #334155;
   }
+}
+
+/* Dark mode support - Docusaurus theme toggle */
+[data-theme='dark'] .chatbot-window {
+  background: #1e293b;
+}
+
+[data-theme='dark'] .chatbot-messages {
+  background: #0f172a;
+}
+
+[data-theme='dark'] .chat-message--assistant .chat-message__bubble {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+[data-theme='dark'] .chatbot-footer {
+  background: #1e293b;
+  border-top-color: #334155;
+}
+
+[data-theme='dark'] .chat-input__textarea {
+  background: #334155;
+  color: #f1f5f9;
+  border-color: #475569;
+}
+
+[data-theme='dark'] .chat-input__textarea:focus {
+  border-color: #667eea;
+}
+
+[data-theme='dark'] .chatbot-footer__info {
+  color: #64748b;
+}
+
+[data-theme='dark'] .chat-message__source-external {
+  border-color: #475569;
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .chat-message__source-external:hover {
+  background: #475569;
+  border-color: #667eea;
+  color: #667eea;
+}
+
+[data-theme='dark'] .markdown-code-block pre {
+  background: #0f172a;
+}
+
+[data-theme='dark'] .markdown-code-block .code-header {
+  background: #1e293b;
+  border-bottom-color: #334155;
+}
+
+[data-theme='dark'] .markdown-inline-code {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+[data-theme='dark'] .markdown-reference {
+  background: #1e293b;
+  color: #667eea;
+}
+
+[data-theme='dark'] .markdown-reference:hover {
+  background: #334155;
 }
 
 /* Markdown Content Styles - Reset all Docusaurus/infima globals */

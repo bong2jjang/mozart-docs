@@ -18,12 +18,6 @@ module.exports = {
     defaultLocale: 'ko',
     locales: ['ko'],
   },
-  scripts: [
-    {
-      src: '/js/custom.js',
-      async: false,
-    },
-  ],
   themeConfig: {
     image: 'img/meta-image.png',
     // announcementBar: {

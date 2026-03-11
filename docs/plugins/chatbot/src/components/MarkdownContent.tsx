@@ -2,6 +2,7 @@
  * Markdown Content Renderer with Code Highlighting
  */
 import React, { useEffect, useRef } from 'react';
+import { useHistory } from '@docusaurus/router';
 
 interface MarkdownContentProps {
   content: string;
@@ -10,6 +11,7 @@ interface MarkdownContentProps {
 
 export function MarkdownContent({ content, sources = [] }: MarkdownContentProps) {
   const contentRef = useRef<HTMLDivElement>(null);
+  const history = useHistory();
 
   useEffect(() => {
     // Highlight code blocks using Prism (available in Docusaurus)
@@ -135,8 +137,13 @@ export function MarkdownContent({ content, sources = [] }: MarkdownContentProps)
     // Italic (*text* or _text_) - be careful not to match list markers
     html = html.replace(/\*([^\*\n]+)\*/g, '<em>$1</em>');
 
-    // Links ([text](url))
-    html = html.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    // Links ([text](url)) - 외부 링크만 새 탭에서 열기
+    html = html.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, (_match, text, url) => {
+      if (/^https?:\/\//.test(url)) {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+      }
+      return `<a href="${url}">${text}</a>`;
+    });
 
     // Source references ([1], [2], etc.)
     html = html.replace(/\[(\d+)\]/g, (match, num) => {
@@ -160,6 +167,24 @@ export function MarkdownContent({ content, sources = [] }: MarkdownContentProps)
     });
 
     return html;
+  };
+
+  // 내부 링크 클릭 시 Docusaurus 라우터로 이동 (사이드바 컨텍스트 유지)
+  const handleLinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    const anchor = target.closest('a');
+    if (!anchor) return;
+
+    const href = anchor.getAttribute('href');
+    if (!href) return;
+
+    // 외부 링크(target="_blank" 또는 절대 URL)는 기본 동작 유지
+    if (anchor.getAttribute('target') === '_blank') return;
+    if (/^https?:\/\//.test(href)) return;
+
+    // 내부 링크는 Docusaurus 라우터로 이동
+    e.preventDefault();
+    history.push(href);
   };
 
   const handleCopyClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -187,7 +212,7 @@ export function MarkdownContent({ content, sources = [] }: MarkdownContentProps)
     <div
       ref={contentRef}
       className="markdown-content"
-      onClick={handleCopyClick}
+      onClick={(e) => { handleLinkClick(e); handleCopyClick(e); }}
       dangerouslySetInnerHTML={{ __html: parseMarkdown(content) }}
     />
   );

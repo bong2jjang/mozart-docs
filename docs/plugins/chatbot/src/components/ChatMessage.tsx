@@ -2,6 +2,7 @@
  * Chat Message Component
  */
 import React from 'react';
+import Link from '@docusaurus/Link';
 import type { Message } from '../types';
 import { MarkdownContent } from './MarkdownContent';
 
@@ -64,12 +65,12 @@ export function ChatMessage({ message, isStreaming = false }: ChatMessageProps) 
             <div className="chat-message__sources-title">📚 참고 문서:</div>
             {message.sources.map((source, index) => (
               <div key={index} className="chat-message__source-wrapper">
-                <a
-                  href={source.file}
+                <Link
+                  to={source.file}
                   className="chat-message__source"
                 >
                   {source.title}
-                </a>
+                </Link>
                 <button
                   onClick={(e) => {
                     e.preventDefault();

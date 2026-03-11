@@ -972,17 +972,6 @@ table thead {
 
 /* LOGO STRATEGY */
 
-/* Hide logo/brand in doc sidebar (desktop left panel) */
-.theme-doc-sidebar-container .navbar__brand,
-.theme-doc-sidebar-container a.navbar__brand,
-.theme-doc-sidebar-container .navbar__title,
-aside.theme-doc-sidebar-container img[src*="logo"],
-div[class*="docSidebar"] .navbar__brand,
-div[class*="docSidebar"] a.navbar__brand,
-div[class*="docSidebar"] .navbar__title {
-  display: none !important;
-}
-
 /* Desktop: show full logo */
 .navbar__logo img {
   height: 28px;
