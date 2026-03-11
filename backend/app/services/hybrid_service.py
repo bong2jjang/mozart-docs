@@ -175,8 +175,8 @@ class HybridRAGMCP:
         full_answer = ""
         tokens_used = 0
         token_buffer = ""
-        FLUSH_CHARS = ("\n", ".", "!", "?", ":", ";", "```")
-        BUFFER_LIMIT = 30  # flush when buffer reaches this many chars
+        FLUSH_CHARS = ("\n", ".", "!", "?", "```")
+        BUFFER_LIMIT = 40  # Optimal for Korean chatbot - balances responsiveness and efficiency
 
         def _flush_sse(text: str) -> str:
             return f"data: {json.dumps({'type': 'token', 'content': text}, ensure_ascii=False)}\n\n"

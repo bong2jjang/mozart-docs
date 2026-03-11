@@ -40,12 +40,31 @@ export function Chatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  // Layout state
-  const [layoutMode, setLayoutMode] = useState<LayoutMode>('floating');
-  const [chatbotWidth, setChatbotWidth] = useState(400);
-  const [chatbotHeight, setChatbotHeight] = useState(600);
-  const [positionX, setPositionX] = useState<number | null>(null); // null = default position
-  const [positionY, setPositionY] = useState<number | null>(null);
+  // Layout state (initialized from localStorage to prevent flickering)
+  const [layoutMode, setLayoutMode] = useState<LayoutMode>(() => {
+    if (typeof window === 'undefined') return 'floating';
+    return (localStorage.getItem('chatbot_layout_mode') as LayoutMode) || 'floating';
+  });
+  const [chatbotWidth, setChatbotWidth] = useState(() => {
+    if (typeof window === 'undefined') return 400;
+    const saved = localStorage.getItem('chatbot_layout_width');
+    return saved ? parseInt(saved) : 400;
+  });
+  const [chatbotHeight, setChatbotHeight] = useState(() => {
+    if (typeof window === 'undefined') return 600;
+    const saved = localStorage.getItem('chatbot_layout_height');
+    return saved ? parseInt(saved) : 600;
+  });
+  const [positionX, setPositionX] = useState<number | null>(() => {
+    if (typeof window === 'undefined') return null;
+    const saved = localStorage.getItem('chatbot_position_x');
+    return saved ? parseInt(saved) : null;
+  });
+  const [positionY, setPositionY] = useState<number | null>(() => {
+    if (typeof window === 'undefined') return null;
+    const saved = localStorage.getItem('chatbot_position_y');
+    return saved ? parseInt(saved) : null;
+  });
   const [isResizing, setIsResizing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [viewportHeight, setViewportHeight] = useState<number | null>(null);
@@ -80,21 +99,6 @@ export function Chatbot() {
       window.visualViewport?.removeEventListener('scroll', handleViewportResize);
     };
   }, [isOpen]);
-
-  // Load layout from localStorage
-  useEffect(() => {
-    const savedMode = localStorage.getItem('chatbot_layout_mode') as LayoutMode;
-    const savedWidth = localStorage.getItem('chatbot_layout_width');
-    const savedHeight = localStorage.getItem('chatbot_layout_height');
-    const savedX = localStorage.getItem('chatbot_position_x');
-    const savedY = localStorage.getItem('chatbot_position_y');
-
-    if (savedMode) setLayoutMode(savedMode);
-    if (savedWidth) setChatbotWidth(parseInt(savedWidth));
-    if (savedHeight) setChatbotHeight(parseInt(savedHeight));
-    if (savedX) setPositionX(parseInt(savedX));
-    if (savedY) setPositionY(parseInt(savedY));
-  }, []);
 
   // Save layout to localStorage
   useEffect(() => {
