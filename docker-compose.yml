@@ -65,7 +65,7 @@ services:
       - mozart-network
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-  # Frontend Docs
+  # Frontend Docs (production build with search index)
   frontend:
     build:
       context: ./docs
@@ -73,18 +73,11 @@ services:
     container_name: mozart-frontend
     ports:
       - "3000:3000"
-    volumes:
-      # Mount code for hot reload in development
-      - ./docs:/app
-      - /app/node_modules
-      - /app/.docusaurus
     depends_on:
       - backend
     restart: unless-stopped
     networks:
       - mozart-network
-    stdin_open: true
-    tty: true
 
 networks:
   mozart-network:

@@ -60,7 +60,7 @@ module.exports = {
       '@easyops-cn/docusaurus-search-local',
       {
         hashed: true,
-        language: ['en', 'zh'],
+        language: ['en', 'zh', 'ja'],
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
         indexBlog: false,
