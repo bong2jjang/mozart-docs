@@ -1046,6 +1046,43 @@ body.chatbot-dragging * {
 }
 
 /* ============================================
+   Thinking Indicator (before first token)
+   ============================================ */
+
+.chat-message__thinking {
+  display: flex;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.chat-message__thinking-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.chat-message__thinking-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #94a3b8;
+  animation: thinkingPulse 1.4s ease-in-out infinite;
+}
+
+.chat-message__thinking-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.chat-message__thinking-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes thinkingPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* ============================================
    Status Message (pipeline progress)
    ============================================ */
 
@@ -1057,12 +1094,12 @@ body.chatbot-dragging * {
 }
 
 .chat-message__status-spinner {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border: 2px solid #e2e8f0;
   border-top-color: #667eea;
   border-radius: 50%;
-  animation: statusSpin 0.8s linear infinite;
+  animation: statusSpin 0.7s linear infinite;
   flex-shrink: 0;
 }
 
@@ -1077,19 +1114,21 @@ body.chatbot-dragging * {
 }
 
 @keyframes statusFadeIn {
-  from { opacity: 0; transform: translateX(-4px); }
-  to { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@media (prefers-color-scheme: dark) {
-  .chat-message__status-spinner {
-    border-color: #475569;
-    border-top-color: #667eea;
-  }
+[data-theme='dark'] .chat-message__thinking-dots span {
+  background: #64748b;
+}
 
-  .chat-message__status-text {
-    color: #94a3b8;
-  }
+[data-theme='dark'] .chat-message__status-spinner {
+  border-color: #475569;
+  border-top-color: #818cf8;
+}
+
+[data-theme='dark'] .chat-message__status-text {
+  color: #94a3b8;
 }
 
 /* ============================================
@@ -1097,13 +1136,21 @@ body.chatbot-dragging * {
    ============================================ */
 
 .chat-message__cursor {
-  display: inline;
-  color: #667eea;
-  font-weight: bold;
-  animation: cursorBlink 0.8s ease-in-out infinite;
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: #667eea;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  border-radius: 1px;
+  animation: cursorBlink 1s step-end infinite;
 }
 
 @keyframes cursorBlink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+[data-theme='dark'] .chat-message__cursor {
+  background: #818cf8;
 }

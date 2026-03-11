@@ -43,8 +43,18 @@ export function ChatMessage({ message, isStreaming = false }: ChatMessageProps) 
             message.content
           ) : (
             <>
-              <MarkdownContent content={message.content} sources={message.sources} />
-              {isStreaming && <span className="chat-message__cursor">▌</span>}
+              {isStreaming && !message.content ? (
+                <div className="chat-message__thinking">
+                  <div className="chat-message__thinking-dots">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <MarkdownContent content={message.content} sources={message.sources} />
+                  {isStreaming && <span className="chat-message__cursor" />}
+                </>
+              )}
             </>
           )}
         </div>

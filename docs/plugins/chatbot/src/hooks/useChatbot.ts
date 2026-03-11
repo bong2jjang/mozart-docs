@@ -7,16 +7,41 @@ import { chatbotAPI } from '../utils/api';
 
 const MAX_MESSAGES = 50;
 const STORAGE_KEY = 'mozart-chatbot-messages';
+const OPEN_STATE_KEY = 'mozart-chatbot-open';
+
+/**
+ * Safely read boolean value from localStorage
+ */
+const getStoredBoolean = (key: string, defaultValue = false): boolean => {
+  if (typeof window === 'undefined') return defaultValue;
+  try {
+    return localStorage.getItem(key) === 'true';
+  } catch {
+    return defaultValue;
+  }
+};
+
+/**
+ * Safely write boolean value to localStorage
+ */
+const setStoredBoolean = (key: string, value: boolean): void => {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(key, String(value));
+  } catch (error) {
+    console.error(`Failed to save ${key}:`, error);
+  }
+};
 
 export function useChatbot() {
-  const [state, setState] = useState<ChatbotState>({
+  const [state, setState] = useState<ChatbotState>(() => ({
     messages: [],
-    isOpen: false,
+    isOpen: getStoredBoolean(OPEN_STATE_KEY),
     isLoading: false,
     isStreaming: false,
     statusMessage: null,
     error: null,
-  });
+  }));
 
   const abortControllerRef = useRef<AbortController | null>(null);
   const assistantIdRef = useRef<string | null>(null);
@@ -66,9 +91,13 @@ export function useChatbot() {
     });
   }, []);
 
-  // Toggle chatbot open/close
+  // Toggle chatbot open/close (persists to localStorage)
   const toggleOpen = useCallback(() => {
-    setState((prev) => ({ ...prev, isOpen: !prev.isOpen }));
+    setState((prev) => {
+      const next = !prev.isOpen;
+      setStoredBoolean(OPEN_STATE_KEY, next);
+      return { ...prev, isOpen: next };
+    });
   }, []);
 
   // Send message with streaming

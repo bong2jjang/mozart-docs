@@ -501,21 +501,13 @@ export function Chatbot() {
               />
             ))}
 
-            {isLoading && !isStreaming && (
+            {isLoading && !isStreaming && statusMessage && (
               <div className="chat-message chat-message--assistant">
                 <div className="chat-message__bubble">
-                  {statusMessage ? (
-                    <div className="chat-message__status">
-                      <span className="chat-message__status-spinner"></span>
-                      <span className="chat-message__status-text">{statusMessage}</span>
-                    </div>
-                  ) : (
-                    <div className="chat-message__loading">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </div>
-                  )}
+                  <div className="chat-message__status">
+                    <span className="chat-message__status-spinner"></span>
+                    <span className="chat-message__status-text">{statusMessage}</span>
+                  </div>
                 </div>
               </div>
             )}
