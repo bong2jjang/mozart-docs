@@ -28,6 +28,8 @@ export function Chatbot() {
     messages,
     isOpen,
     isLoading,
+    isStreaming,
+    statusMessage,
     error,
     toggleOpen,
     sendMessage,
@@ -491,18 +493,29 @@ export function Chatbot() {
 
           {/* Messages */}
           <div className="chatbot-messages" ref={messagesContainerRef}>
-            {displayMessages.map((message) => (
-              <ChatMessage key={message.id} message={message} />
+            {displayMessages.map((message, index) => (
+              <ChatMessage
+                key={message.id}
+                message={message}
+                isStreaming={isStreaming && index === displayMessages.length - 1 && message.role === 'assistant'}
+              />
             ))}
 
-            {isLoading && (
+            {isLoading && !isStreaming && (
               <div className="chat-message chat-message--assistant">
                 <div className="chat-message__bubble">
-                  <div className="chat-message__loading">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
+                  {statusMessage ? (
+                    <div className="chat-message__status">
+                      <span className="chat-message__status-spinner"></span>
+                      <span className="chat-message__status-text">{statusMessage}</span>
+                    </div>
+                  ) : (
+                    <div className="chat-message__loading">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -528,7 +541,7 @@ export function Chatbot() {
           <div className="chatbot-footer">
             <ChatInput
               onSend={sendMessage}
-              disabled={isLoading}
+              disabled={isLoading || isStreaming}
               placeholder="질문을 입력하세요..."
             />
             <div className="chatbot-footer__info">

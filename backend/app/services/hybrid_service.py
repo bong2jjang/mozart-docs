@@ -1,5 +1,9 @@
 """Hybrid RAG + MCP Service - Core chatbot logic"""
-from typing import Dict, List, Optional
+from typing import AsyncGenerator, Dict, List, Optional
+import asyncio
+import json
+import queue
+import threading
 from openai import OpenAI
 import anthropic
 
@@ -114,6 +118,195 @@ class HybridRAGMCP:
         )
 
         return result
+
+    async def answer_stream(self, question: str, conversation_history: List[Dict] = None) -> AsyncGenerator[str, None]:
+        """
+        Generate answer using hybrid RAG+MCP pipeline with SSE streaming
+
+        Yields SSE-formatted events:
+          data: {"type": "token", "content": "..."}
+          data: {"type": "sources", "sources": [...]}
+          data: {"type": "done", "tokens_used": N, "cached": false}
+        """
+        def _status(msg: str) -> str:
+            return f"data: {json.dumps({'type': 'status', 'content': msg}, ensure_ascii=False)}\n\n"
+
+        # Step 1: Check cache
+        yield _status("캐시 확인 중...")
+        cached = self.cache_service.get_with_metadata(question)
+        if cached:
+            sources = self._format_sources(cached.get("sources", []))
+            yield f"data: {json.dumps({'type': 'token', 'content': cached['answer']}, ensure_ascii=False)}\n\n"
+            yield f"data: {json.dumps({'type': 'sources', 'sources': [s.model_dump() for s in sources]}, ensure_ascii=False)}\n\n"
+            yield f"data: {json.dumps({'type': 'done', 'tokens_used': 0, 'cached': True}, ensure_ascii=False)}\n\n"
+            return
+
+        # Step 2: RAG - Vector search
+        yield _status("관련 문서 검색 중...")
+        top_k = self._determine_top_k(question)
+        file_paths = self.vector_service.get_file_paths_from_query(question, top_k=top_k)
+
+        if not file_paths:
+            msg = "죄송합니다. 질문과 관련된 문서를 찾을 수 없습니다. 다른 키워드로 질문해 주시겠어요?"
+            yield f"data: {json.dumps({'type': 'token', 'content': msg}, ensure_ascii=False)}\n\n"
+            yield f"data: {json.dumps({'type': 'done', 'tokens_used': 0, 'cached': False}, ensure_ascii=False)}\n\n"
+            return
+
+        # Step 3: MCP - Read files
+        yield _status(f"{len(file_paths)}개 문서 분석 중...")
+        documents = []
+        for path in file_paths:
+            try:
+                relative_path = self._convert_to_relative_path(path)
+                content = self.mcp_server.read_file(relative_path)
+                documents.append({"path": path, "content": content[:3000]})
+            except Exception as e:
+                print(f"Failed to read {path}: {e}")
+                continue
+
+        if not documents:
+            msg = "문서를 읽는 중 오류가 발생했습니다. 다시 시도해 주세요."
+            yield f"data: {json.dumps({'type': 'token', 'content': msg}, ensure_ascii=False)}\n\n"
+            yield f"data: {json.dumps({'type': 'done', 'tokens_used': 0, 'cached': False}, ensure_ascii=False)}\n\n"
+            return
+
+        # Step 4: LLM - Stream answer (tokens are buffered and flushed in chunks)
+        yield _status("답변 생성 중...")
+        full_answer = ""
+        tokens_used = 0
+        token_buffer = ""
+        FLUSH_CHARS = ("\n", ".", "!", "?", ":", ";", "```")
+        BUFFER_LIMIT = 30  # flush when buffer reaches this many chars
+
+        def _flush_sse(text: str) -> str:
+            return f"data: {json.dumps({'type': 'token', 'content': text}, ensure_ascii=False)}\n\n"
+
+        if self.config.llm.provider == "openai":
+            stream_gen = self._stream_with_openai(question, documents, conversation_history)
+        elif self.config.llm.provider == "anthropic":
+            stream_gen = self._stream_with_claude(question, documents, conversation_history)
+        else:
+            stream_gen = None
+
+        if stream_gen:
+            async for chunk_data in stream_gen:
+                if chunk_data["type"] == "token":
+                    token_buffer += chunk_data["content"]
+                    full_answer += chunk_data["content"]
+                    # Flush on natural break points or buffer size limit
+                    if len(token_buffer) >= BUFFER_LIMIT or any(token_buffer.endswith(c) for c in FLUSH_CHARS):
+                        yield _flush_sse(token_buffer)
+                        token_buffer = ""
+                elif chunk_data["type"] == "usage":
+                    tokens_used = chunk_data["tokens_used"]
+            # Flush remaining buffer
+            if token_buffer:
+                yield _flush_sse(token_buffer)
+                token_buffer = ""
+
+        # Step 5: Send sources
+        sources = self._format_sources(documents)
+        if self._is_no_answer(full_answer):
+            sources = []
+        yield f"data: {json.dumps({'type': 'sources', 'sources': [s.model_dump() for s in sources]}, ensure_ascii=False)}\n\n"
+
+        # Step 6: Cache result
+        self.cache_service.set(
+            question,
+            full_answer,
+            sources=[{"file": doc["path"]} for doc in documents] if sources else []
+        )
+
+        yield f"data: {json.dumps({'type': 'done', 'tokens_used': tokens_used, 'cached': False}, ensure_ascii=False)}\n\n"
+
+    async def _stream_with_openai(
+        self, question: str, documents: List[Dict], conversation_history: List[Dict] = None
+    ) -> AsyncGenerator[Dict, None]:
+        """Stream answer from OpenAI using thread to avoid blocking event loop"""
+        context = self._build_context(documents)
+        messages = [{"role": "system", "content": self._get_system_prompt()}]
+        if conversation_history:
+            messages.extend(conversation_history)
+        messages.append({
+            "role": "user",
+            "content": f"아래 문서들을 참고하여 질문에 답변해주세요.\n\n질문: {question}\n\n참고 문서:\n{context}"
+        })
+
+        q: queue.Queue = queue.Queue()
+
+        def _run():
+            try:
+                stream = self.llm_client.chat.completions.create(
+                    model=self.config.llm.model,
+                    messages=messages,
+                    temperature=self.config.llm.temperature,
+                    max_tokens=self.config.llm.max_tokens,
+                    stream=True,
+                    stream_options={"include_usage": True}
+                )
+                for chunk in stream:
+                    if chunk.choices and chunk.choices[0].delta.content:
+                        q.put({"type": "token", "content": chunk.choices[0].delta.content})
+                    if hasattr(chunk, 'usage') and chunk.usage:
+                        q.put({"type": "usage", "tokens_used": chunk.usage.total_tokens})
+            except Exception as e:
+                print(f"OpenAI streaming error: {e}")
+                q.put({"type": "token", "content": f"답변 생성 중 오류가 발생했습니다.\n오류 내용: {str(e)}"})
+            finally:
+                q.put(None)  # Sentinel
+
+        thread = threading.Thread(target=_run, daemon=True)
+        thread.start()
+
+        loop = asyncio.get_event_loop()
+        while True:
+            item = await loop.run_in_executor(None, q.get)
+            if item is None:
+                break
+            yield item
+
+    async def _stream_with_claude(
+        self, question: str, documents: List[Dict], conversation_history: List[Dict] = None
+    ) -> AsyncGenerator[Dict, None]:
+        """Stream answer from Claude using thread to avoid blocking event loop"""
+        context = self._build_context(documents)
+        messages = list(conversation_history or [])
+        messages.append({
+            "role": "user",
+            "content": f"아래 문서들을 참고하여 질문에 답변해주세요.\n\n질문: {question}\n\n참고 문서:\n{context}"
+        })
+
+        q: queue.Queue = queue.Queue()
+
+        def _run():
+            try:
+                with self.llm_client.messages.stream(
+                    model=self.config.llm.model,
+                    max_tokens=self.config.llm.max_tokens,
+                    temperature=self.config.llm.temperature,
+                    system=self._get_system_prompt(),
+                    messages=messages
+                ) as stream:
+                    for text in stream.text_stream:
+                        q.put({"type": "token", "content": text})
+                    response = stream.get_final_message()
+                    tokens_used = response.usage.input_tokens + response.usage.output_tokens
+                    q.put({"type": "usage", "tokens_used": tokens_used})
+            except Exception as e:
+                print(f"Claude streaming error: {e}")
+                q.put({"type": "token", "content": f"답변 생성 중 오류가 발생했습니다.\n오류 내용: {str(e)}"})
+            finally:
+                q.put(None)  # Sentinel
+
+        thread = threading.Thread(target=_run, daemon=True)
+        thread.start()
+
+        loop = asyncio.get_event_loop()
+        while True:
+            item = await loop.run_in_executor(None, q.get)
+            if item is None:
+                break
+            yield item
 
     def _convert_to_relative_path(self, path: str) -> str:
         r"""

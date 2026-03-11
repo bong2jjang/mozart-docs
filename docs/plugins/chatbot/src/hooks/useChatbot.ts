@@ -1,8 +1,8 @@
 /**
  * Chatbot React Hook
  */
-import { useState, useCallback, useEffect } from 'react';
-import type { Message, ChatbotState } from '../types';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import type { Message, ChatbotState, SourceDocument } from '../types';
 import { chatbotAPI } from '../utils/api';
 
 const MAX_MESSAGES = 50;
@@ -13,8 +13,13 @@ export function useChatbot() {
     messages: [],
     isOpen: false,
     isLoading: false,
+    isStreaming: false,
+    statusMessage: null,
     error: null,
   });
+
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const assistantIdRef = useRef<string | null>(null);
 
   // Load messages from localStorage on mount
   useEffect(() => {
@@ -22,7 +27,6 @@ export function useChatbot() {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const messages = JSON.parse(stored);
-        // Clean up messages with broken code block placeholders from old parser
         const hasCorruptedMessages = messages.some(
           (msg: Message) => /(?:__CODE_BLOCK_\d+__|CODE_BLOCK_\d+)/.test(msg.content)
         );
@@ -47,17 +51,31 @@ export function useChatbot() {
     }
   }, []);
 
+  // Append token directly to assistant message
+  const appendToken = useCallback((token: string, aid: string) => {
+    setState((prev) => {
+      const messages = [...prev.messages];
+      const lastMsg = messages[messages.length - 1];
+      if (lastMsg && lastMsg.id === aid) {
+        messages[messages.length - 1] = {
+          ...lastMsg,
+          content: lastMsg.content + token,
+        };
+      }
+      return { ...prev, messages, isLoading: false, statusMessage: null };
+    });
+  }, []);
+
   // Toggle chatbot open/close
   const toggleOpen = useCallback(() => {
     setState((prev) => ({ ...prev, isOpen: !prev.isOpen }));
   }, []);
 
-  // Send message
+  // Send message with streaming
   const sendMessage = useCallback(
     async (content: string) => {
-      if (!content.trim() || state.isLoading) return;
+      if (!content.trim() || state.isLoading || state.isStreaming) return;
 
-      // Add user message
       const userMessage: Message = {
         id: `user-${Date.now()}`,
         role: 'user',
@@ -65,54 +83,110 @@ export function useChatbot() {
         timestamp: Date.now(),
       };
 
+      const assistantId = `assistant-${Date.now()}`;
+      assistantIdRef.current = assistantId;
+      const assistantMessage: Message = {
+        id: assistantId,
+        role: 'assistant',
+        content: '',
+        timestamp: Date.now(),
+      };
+
       setState((prev) => ({
         ...prev,
-        messages: [...prev.messages, userMessage],
+        messages: [...prev.messages, userMessage, assistantMessage],
         isLoading: true,
+        isStreaming: true,
+        statusMessage: null,
         error: null,
       }));
 
+      const recentMessages = state.messages.slice(-5).map((msg) => ({
+        role: msg.role,
+        content: msg.content,
+      }));
+
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
+
       try {
-        // Prepare conversation history (last 5 messages)
-        const recentMessages = state.messages.slice(-5).map((msg) => ({
-          role: msg.role,
-          content: msg.content,
-        }));
+        await chatbotAPI.sendMessageStream(
+          {
+            question: content.trim(),
+            conversation_history: recentMessages,
+          },
+          {
+            onStatus: (statusContent: string) => {
+              setState((prev) => ({
+                ...prev,
+                statusMessage: statusContent,
+              }));
+            },
+            onToken: (token: string) => {
+              appendToken(token, assistantId);
+            },
+            onSources: (sources: SourceDocument[]) => {
+              setState((prev) => {
+                const messages = [...prev.messages];
+                const lastMsg = messages[messages.length - 1];
+                if (lastMsg && lastMsg.id === assistantId) {
+                  messages[messages.length - 1] = { ...lastMsg, sources };
+                }
+                return { ...prev, messages };
+              });
+            },
+            onDone: (data) => {
+              setState((prev) => {
+                const messages = [...prev.messages];
+                const lastMsg = messages[messages.length - 1];
+                if (lastMsg && lastMsg.id === assistantId) {
+                  messages[messages.length - 1] = {
+                    ...lastMsg,
+                    cached: data.cached,
+                    tokensUsed: data.tokens_used,
+                  };
+                }
 
-        // Call API
-        const response = await chatbotAPI.sendMessage({
-          question: content.trim(),
-          conversation_history: recentMessages,
-        });
+                const limitedMessages =
+                  messages.length > MAX_MESSAGES
+                    ? messages.slice(-MAX_MESSAGES)
+                    : messages;
 
-        // Add assistant message
-        const assistantMessage: Message = {
-          id: `assistant-${Date.now()}`,
-          role: 'assistant',
-          content: response.answer,
-          timestamp: Date.now(),
-          sources: response.sources,
-          cached: response.cached,
-          tokensUsed: response.tokens_used,
-        };
+                saveMessages(limitedMessages);
 
-        setState((prev) => {
-          const newMessages = [...prev.messages, assistantMessage];
-
-          // Limit message history
-          const limitedMessages =
-            newMessages.length > MAX_MESSAGES
-              ? newMessages.slice(-MAX_MESSAGES)
-              : newMessages;
-
-          saveMessages(limitedMessages);
-
-          return {
-            ...prev,
-            messages: limitedMessages,
-            isLoading: false,
-          };
-        });
+                return {
+                  ...prev,
+                  messages: limitedMessages,
+                  isStreaming: false,
+                  isLoading: false,
+                  statusMessage: null,
+                };
+              });
+            },
+            onError: (errorMessage: string) => {
+              setState((prev) => {
+                const messages = [...prev.messages];
+                const lastMsg = messages[messages.length - 1];
+                if (lastMsg && lastMsg.id === assistantId) {
+                  messages[messages.length - 1] = {
+                    ...lastMsg,
+                    content: errorMessage,
+                  };
+                }
+                saveMessages(messages);
+                return {
+                  ...prev,
+                  messages,
+                  isLoading: false,
+                  isStreaming: false,
+                  statusMessage: null,
+                  error: errorMessage,
+                };
+              });
+            },
+          },
+          abortController.signal
+        );
       } catch (error) {
         const errorMessage =
           error instanceof Error
@@ -122,30 +196,22 @@ export function useChatbot() {
         setState((prev) => ({
           ...prev,
           isLoading: false,
+          isStreaming: false,
+          statusMessage: null,
           error: errorMessage,
         }));
-
-        // Add error message
-        const errorMsg: Message = {
-          id: `error-${Date.now()}`,
-          role: 'assistant',
-          content: errorMessage,
-          timestamp: Date.now(),
-        };
-
-        setState((prev) => {
-          const newMessages = [...prev.messages, errorMsg];
-          saveMessages(newMessages);
-          return { ...prev, messages: newMessages };
-        });
       }
     },
-    [state.messages, state.isLoading, saveMessages]
+    [state.messages, state.isLoading, state.isStreaming, saveMessages, appendToken]
   );
 
   // Clear messages
   const clearMessages = useCallback(() => {
-    setState((prev) => ({ ...prev, messages: [] }));
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setState((prev) => ({ ...prev, messages: [], isLoading: false, isStreaming: false, statusMessage: null }));
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
@@ -158,6 +224,8 @@ export function useChatbot() {
     messages: state.messages,
     isOpen: state.isOpen,
     isLoading: state.isLoading,
+    isStreaming: state.isStreaming,
+    statusMessage: state.statusMessage,
     error: state.error,
     toggleOpen,
     sendMessage,

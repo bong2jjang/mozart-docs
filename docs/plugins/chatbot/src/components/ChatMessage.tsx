@@ -7,9 +7,10 @@ import { MarkdownContent } from './MarkdownContent';
 
 interface ChatMessageProps {
   message: Message;
+  isStreaming?: boolean;
 }
 
-export function ChatMessage({ message }: ChatMessageProps) {
+export function ChatMessage({ message, isStreaming = false }: ChatMessageProps) {
   const isUser = message.role === 'user';
   const [feedback, setFeedback] = React.useState<'like' | 'dislike' | null>(null);
   const [copied, setCopied] = React.useState(false);
@@ -41,7 +42,10 @@ export function ChatMessage({ message }: ChatMessageProps) {
           {isUser ? (
             message.content
           ) : (
-            <MarkdownContent content={message.content} sources={message.sources} />
+            <>
+              <MarkdownContent content={message.content} sources={message.sources} />
+              {isStreaming && <span className="chat-message__cursor">▌</span>}
+            </>
           )}
         </div>
 
@@ -72,7 +76,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
           </div>
         )}
 
-        {!isUser && message.id !== 'welcome' && (
+        {!isUser && message.id !== 'welcome' && !isStreaming && (
           <div className="chat-message__actions">
             <button
               className={`chat-message__action-btn ${copied ? 'chat-message__action-btn--active' : ''}`}

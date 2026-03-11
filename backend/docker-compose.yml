@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Qdrant Vector Database
   qdrant:
@@ -39,6 +37,7 @@ services:
 
   # Backend API
   backend:
+    image: mozart-backend:latest
     build:
       context: .
       dockerfile: Dockerfile

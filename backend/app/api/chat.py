@@ -1,5 +1,6 @@
 """Chat API endpoints"""
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import StreamingResponse
 from app.models.request import ChatRequest
 from app.models.response import ChatResponse
 
@@ -9,6 +10,37 @@ router = APIRouter(prefix="/api", tags=["chat"])
 
 def create_chat_router(get_hybrid_service):
     """Create chat router with service getter function"""
+
+    @router.post("/chat/stream")
+    async def chat_stream(request: ChatRequest):
+        """
+        Streaming chat endpoint - SSE stream of answer tokens
+
+        Returns Server-Sent Events:
+          data: {"type": "token", "content": "..."}
+          data: {"type": "sources", "sources": [...]}
+          data: {"type": "done", "tokens_used": N, "cached": false}
+        """
+        try:
+            hybrid_service = get_hybrid_service()
+            if not hybrid_service:
+                raise ValueError("Hybrid service not initialized")
+
+            return StreamingResponse(
+                hybrid_service.answer_stream(
+                    question=request.question,
+                    conversation_history=request.conversation_history
+                ),
+                media_type="text/event-stream",
+                headers={
+                    "Cache-Control": "no-cache",
+                    "Connection": "keep-alive",
+                    "X-Accel-Buffering": "no",
+                }
+            )
+        except Exception as e:
+            print(f"[ERROR] Error in chat stream endpoint: {type(e).__name__}: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
     @router.post("/chat", response_model=ChatResponse)
     async def chat(request: ChatRequest):

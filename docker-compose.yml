@@ -37,6 +37,7 @@ services:
 
   # Backend API
   backend:
+    image: mozart-backend:latest
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -67,6 +68,7 @@ services:
 
   # Frontend Docs (production build with search index)
   frontend:
+    image: mozart-frontend:latest
     build:
       context: ./docs
       dockerfile: Dockerfile

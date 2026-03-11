@@ -48,5 +48,15 @@ export interface ChatbotState {
   messages: Message[];
   isOpen: boolean;
   isLoading: boolean;
+  isStreaming: boolean;
+  statusMessage: string | null;
   error: string | null;
+}
+
+export interface StreamCallbacks {
+  onStatus: (content: string) => void;
+  onToken: (content: string) => void;
+  onSources: (sources: SourceDocument[]) => void;
+  onDone: (data: { tokens_used: number; cached: boolean }) => void;
+  onError: (error: string) => void;
 }

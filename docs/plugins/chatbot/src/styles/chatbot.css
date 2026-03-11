@@ -1044,3 +1044,66 @@ body.chatbot-dragging * {
   cursor: move !important;
   user-select: none;
 }
+
+/* ============================================
+   Status Message (pipeline progress)
+   ============================================ */
+
+.chat-message__status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.chat-message__status-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e2e8f0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: statusSpin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+.chat-message__status-text {
+  font-size: 13px;
+  color: #64748b;
+  animation: statusFadeIn 0.3s ease-out;
+}
+
+@keyframes statusSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes statusFadeIn {
+  from { opacity: 0; transform: translateX(-4px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-color-scheme: dark) {
+  .chat-message__status-spinner {
+    border-color: #475569;
+    border-top-color: #667eea;
+  }
+
+  .chat-message__status-text {
+    color: #94a3b8;
+  }
+}
+
+/* ============================================
+   Streaming Cursor Animation
+   ============================================ */
+
+.chat-message__cursor {
+  display: inline;
+  color: #667eea;
+  font-weight: bold;
+  animation: cursorBlink 0.8s ease-in-out infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
