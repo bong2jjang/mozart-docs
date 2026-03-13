@@ -1087,6 +1087,26 @@ body [class*="Sidebar"] *[class*="Brand"] {
     min-height: 44px;
   }
 
+  /* Ensure color mode toggle is visible in mobile sidebar */
+  .navbar-sidebar .navbar-sidebar__items {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .navbar-sidebar button[class*="colorModeToggle"],
+  .navbar-sidebar button[class*="toggle"],
+  .navbar-sidebar__items button[class*="colorModeToggle"],
+  .navbar-sidebar__items button[class*="toggle"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin: 0.5rem 1rem;
+    padding: 0.5rem;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+
   /* Content area padding */
   main > div {
     padding-left: 1.5rem !important;
