@@ -17,3 +17,4 @@ e2e_db.sqlite
 fix-cli-permission.sh
 
 .obsidian/
+.claude/
