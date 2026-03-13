@@ -102,10 +102,6 @@ module.exports = {
           },
         },
         blog: false,
-        googleAnalytics: {
-          trackingID: 'UA-112613053-1',
-          anonymizeIP: true,
-        },
         theme: {
           customCss: [
             './node_modules/remixicon/fonts/remixicon.css',
