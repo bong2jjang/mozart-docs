@@ -985,10 +985,20 @@ table thead {
   }
 }
 
-/* Mobile navbar-sidebar: hide logo in brand bar */
-.navbar-sidebar__brand .navbar__brand,
-.navbar-sidebar__brand a.navbar__brand {
+/* Mobile navbar-sidebar: hide logo in brand bar, but keep color mode toggle */
+.navbar-sidebar__brand .navbar__brand img,
+.navbar-sidebar__brand a.navbar__brand img,
+.navbar-sidebar__brand .navbar__logo {
   display: none !important;
+}
+
+/* Ensure color mode toggle is visible in navbar-sidebar__brand */
+.navbar-sidebar__brand .custom-color-mode-toggle-wrapper,
+.navbar-sidebar__brand button[class*="colorModeToggle"],
+.navbar-sidebar__brand button[class*="toggle"] {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /*
