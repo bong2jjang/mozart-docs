@@ -1,32 +1,32 @@
-/**
- * Swizzled SecondaryMenu component
- * Ensures color mode toggle is rendered and visible in mobile sidebar
- */
-import React from 'react';
+import React, {type ComponentProps, type ReactNode} from 'react';
 import {useThemeConfig} from '@docusaurus/theme-common';
-import ColorModeToggle from '@theme/ColorModeToggle';
+import {useNavbarSecondaryMenu} from '@docusaurus/theme-common/internal';
+import Translate from '@docusaurus/Translate';
 
-function SecondaryMenuBackButton(props: {onClick: () => void}) {
+function SecondaryMenuBackButton(props: ComponentProps<'button'>) {
   return (
-    <button type="button" {...props} className="clean-btn navbar-sidebar__back">
-      ← Back to main menu
+    <button {...props} type="button" className="clean-btn navbar-sidebar__back">
+      <Translate
+        id="theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel"
+        description="The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)">
+        ← Back to main menu
+      </Translate>
     </button>
   );
 }
 
-export default function NavbarMobileSidebarSecondaryMenu(): JSX.Element | null {
-  const {
-    colorMode: {disableSwitch},
-  } = useThemeConfig();
-
-  // If color mode switch is disabled, don't render anything
-  if (disableSwitch) {
-    return null;
-  }
-
+// The secondary menu slides from the right and shows contextual information
+// such as the docs sidebar
+export default function NavbarMobileSidebarSecondaryMenu(): ReactNode {
+  const isPrimaryMenuEmpty = useThemeConfig().navbar.items.length === 0;
+  const secondaryMenu = useNavbarSecondaryMenu();
   return (
-    <div className="navbar-sidebar__item menu">
-      <ColorModeToggle className="margin-horiz--md" />
-    </div>
+    <>
+      {/* edge-case: prevent returning to the primaryMenu when it's empty */}
+      {!isPrimaryMenuEmpty && (
+        <SecondaryMenuBackButton onClick={() => secondaryMenu.hide()} />
+      )}
+      {secondaryMenu.content}
+    </>
   );
 }

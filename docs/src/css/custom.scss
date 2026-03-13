@@ -1074,6 +1074,19 @@ body [class*="Sidebar"] *[class*="Brand"] {
  * ===========================
  */
 
+/* Force colorMode toggle to be visible everywhere */
+.custom-color-mode-toggle-wrapper {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.custom-color-mode-toggle-wrapper button {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
 /* Tablet (768px and below) */
 @media (max-width: 768px) {
   /* Mobile sidebar menu - only touch targets and font, no layout changes */
@@ -1087,24 +1100,12 @@ body [class*="Sidebar"] *[class*="Brand"] {
     min-height: 44px;
   }
 
-  /* Ensure color mode toggle is visible in mobile sidebar */
-  .navbar-sidebar .navbar-sidebar__items {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .navbar-sidebar button[class*="colorModeToggle"],
-  .navbar-sidebar button[class*="toggle"],
-  .navbar-sidebar__items button[class*="colorModeToggle"],
-  .navbar-sidebar__items button[class*="toggle"] {
+  /* Ensure color mode toggle is visible in mobile */
+  .custom-color-mode-toggle-wrapper {
     display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    margin: 0.5rem 1rem;
-    padding: 0.5rem;
     min-height: 44px;
     align-items: center;
-    justify-content: center;
+    padding: 0.5rem 1rem;
   }
 
   /* Content area padding */
