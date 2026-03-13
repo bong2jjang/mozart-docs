@@ -1008,6 +1008,68 @@ table thead {
 
 /*
  * ===========================
+ * Doc Sidebar Logo Hiding
+ * ===========================
+ * Hide logo images in doc sidebar contexts (left sidebar)
+ * These logos appear when using Docusaurus theme components
+ */
+aside img[src*="logo.png"],
+aside img[src*="/img/logo"],
+.theme-doc-sidebar-container img[src*="logo.png"],
+.theme-doc-sidebar-container img[src*="/img/logo"],
+[class*="sidebar"] img[src*="logo.png"],
+[class*="sidebar"] img[src*="/img/logo"],
+[class*="Sidebar"] img[src*="logo.png"],
+[class*="Sidebar"] img[src*="/img/logo"],
+.menu img[src*="logo.png"],
+.menu img[src*="/img/logo"],
+div[class*="docSidebar"] img[src*="logo.png"],
+div[class*="docSidebar"] img[src*="/img/logo"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Hide brand/logo container elements in sidebar */
+aside .navbar__brand,
+aside a.navbar__brand,
+.theme-doc-sidebar-container .navbar__brand,
+.theme-doc-sidebar-container a.navbar__brand,
+[class*="sidebar"] .navbar__brand,
+[class*="sidebar"] a.navbar__brand,
+[class*="Sidebar"] .navbar__brand,
+[class*="Sidebar"] a.navbar__brand,
+.menu .navbar__brand,
+.menu a.navbar__brand,
+div[class*="docSidebar"] .navbar__brand,
+div[class*="docSidebar"] a.navbar__brand {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Comprehensive hiding of logo-related elements in non-navbar contexts */
+body aside *[class*="logo"],
+body aside *[class*="Logo"],
+body aside *[class*="brand"],
+body aside *[class*="Brand"],
+body [class*="sidebar"] *[class*="logo"],
+body [class*="sidebar"] *[class*="Logo"],
+body [class*="sidebar"] *[class*="brand"],
+body [class*="sidebar"] *[class*="Brand"],
+body [class*="Sidebar"] *[class*="logo"],
+body [class*="Sidebar"] *[class*="Logo"],
+body [class*="Sidebar"] *[class*="brand"],
+body [class*="Sidebar"] *[class*="Brand"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/*
+ * ===========================
  * Mobile Responsive Styles
  * ===========================
  */
