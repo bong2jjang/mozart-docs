@@ -992,14 +992,6 @@ table thead {
   display: none !important;
 }
 
-/* Ensure color mode toggle is visible in navbar-sidebar__brand */
-.navbar-sidebar__brand .custom-color-mode-toggle-wrapper,
-.navbar-sidebar__brand button[class*="colorModeToggle"],
-.navbar-sidebar__brand button[class*="toggle"] {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
 
 /*
  * Fix: navbar (parent) has position:sticky + transition:transform (hideOnScroll),
@@ -1042,40 +1034,57 @@ div[class*="docSidebar"] img[src*="/img/logo"] {
   height: 0 !important;
 }
 
-/* Hide brand/logo container elements in sidebar */
+/* Hide brand/logo container elements in doc sidebar (but NOT mobile navbar-sidebar) */
 aside .navbar__brand,
 aside a.navbar__brand,
 .theme-doc-sidebar-container .navbar__brand,
 .theme-doc-sidebar-container a.navbar__brand,
-[class*="sidebar"] .navbar__brand,
-[class*="sidebar"] a.navbar__brand,
-[class*="Sidebar"] .navbar__brand,
-[class*="Sidebar"] a.navbar__brand,
-.menu .navbar__brand,
-.menu a.navbar__brand,
-div[class*="docSidebar"] .navbar__brand,
-div[class*="docSidebar"] a.navbar__brand {
+[class*="docSidebar"] .navbar__brand,
+[class*="docSidebar"] a.navbar__brand,
+.menu:not(.navbar-sidebar__items) .navbar__brand,
+.menu:not(.navbar-sidebar__items) a.navbar__brand {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
 }
 
-/* Comprehensive hiding of logo-related elements in non-navbar contexts */
-body aside *[class*="logo"],
-body aside *[class*="Logo"],
-body aside *[class*="brand"],
-body aside *[class*="Brand"],
-body [class*="sidebar"] *[class*="logo"],
-body [class*="sidebar"] *[class*="Logo"],
-body [class*="sidebar"] *[class*="brand"],
-body [class*="sidebar"] *[class*="Brand"],
-body [class*="Sidebar"] *[class*="logo"],
-body [class*="Sidebar"] *[class*="Logo"],
-body [class*="Sidebar"] *[class*="brand"],
-body [class*="Sidebar"] *[class*="Brand"] {
+/* Specifically exclude navbar-sidebar from the above hiding */
+.navbar-sidebar .navbar__brand,
+.navbar-sidebar a.navbar__brand,
+.navbar-sidebar__brand {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Comprehensive hiding of logo-related elements in non-navbar contexts (but NOT navbar-sidebar) */
+body aside *[class*="logo"]:not(.navbar-sidebar *):not(.navbar-sidebar__brand *),
+body aside *[class*="Logo"]:not(.navbar-sidebar *):not(.navbar-sidebar__brand *),
+body aside *[class*="brand"]:not(.navbar-sidebar *):not(.navbar-sidebar__brand *),
+body aside *[class*="Brand"]:not(.navbar-sidebar *):not(.navbar-sidebar__brand *),
+body [class*="docSidebar"] *[class*="logo"],
+body [class*="docSidebar"] *[class*="Logo"],
+body [class*="docSidebar"] *[class*="brand"],
+body [class*="docSidebar"] *[class*="Brand"] {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
+}
+
+/* Specifically show navbar-sidebar__brand container */
+.navbar-sidebar__brand {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+/* Show only direct button children and close button - don't force display on internal elements */
+.navbar-sidebar__brand > button,
+.navbar-sidebar__close {
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /*
@@ -1083,19 +1092,6 @@ body [class*="Sidebar"] *[class*="Brand"] {
  * Mobile Responsive Styles
  * ===========================
  */
-
-/* Force colorMode toggle to be visible everywhere */
-.custom-color-mode-toggle-wrapper {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-.custom-color-mode-toggle-wrapper button {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
 
 /* Tablet (768px and below) */
 @media (max-width: 768px) {
@@ -1108,14 +1104,6 @@ body [class*="Sidebar"] *[class*="Brand"] {
   .navbar-sidebar .menu__link {
     font-size: 1.05rem;
     min-height: 44px;
-  }
-
-  /* Ensure color mode toggle is visible in mobile */
-  .custom-color-mode-toggle-wrapper {
-    display: flex !important;
-    min-height: 44px;
-    align-items: center;
-    padding: 0.5rem 1rem;
   }
 
   /* Content area padding */

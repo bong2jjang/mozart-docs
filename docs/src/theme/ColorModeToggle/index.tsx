@@ -6,9 +6,6 @@ import type {WrapperProps} from '@docusaurus/types';
 type Props = WrapperProps<typeof ColorModeToggleType>;
 
 export default function ColorModeToggleWrapper(props: Props): ReactNode {
-  return (
-    <div className="custom-color-mode-toggle-wrapper">
-      <ColorModeToggle {...props} />
-    </div>
-  );
+  // Pass through to original component without any modifications
+  return <ColorModeToggle {...props} />;
 }
