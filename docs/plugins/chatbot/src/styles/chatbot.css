@@ -493,6 +493,7 @@
 }
 
 /* Dark mode support - System preference */
+/* Disabled to follow Docusaurus theme toggle instead of system preference
 @media (prefers-color-scheme: dark) {
   .chatbot-window {
     background: #1e293b;
@@ -560,6 +561,7 @@
     background: #334155;
   }
 }
+*/
 
 /* Dark mode support - Docusaurus theme toggle */
 [data-theme='dark'] .chatbot-window {
@@ -1068,6 +1070,7 @@ body.chatbot-resizing * {
 }
 
 /* Dark mode adjustments for layout modes */
+/* Disabled to follow Docusaurus theme toggle instead of system preference
 @media (prefers-color-scheme: dark) {
   .chatbot-window--sidebar {
     box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
@@ -1090,6 +1093,7 @@ body.chatbot-resizing * {
     background: rgba(102, 126, 234, 0.7);
   }
 }
+*/
 
 /* ============================================
    Dragging State
