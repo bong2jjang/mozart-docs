@@ -10,7 +10,7 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  /* Dagster-inspired purple-blue gradient colors */
+  /* Mozart theme colors */
   --ifm-color-primary: #6366f1;
   --ifm-color-primary-dark: #4f46e5;
   --ifm-color-primary-darker: #4338ca;
@@ -114,6 +114,7 @@ main>div {
   aside.theme-doc-sidebar-container,
   .theme-doc-sidebar-container {
     padding-top: var(--ifm-navbar-height);
+    background-color: var(--ifm-background-color);
   }
 }
 
@@ -123,13 +124,15 @@ main>div {
 
 .navbar {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.95) !important;
+  background-color: #ffffff !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  will-change: transform;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 [data-theme='dark'] .navbar {
-  background-color: rgba(30, 41, 59, 0.95) !important;
+  background-color: #1e293b !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -290,7 +293,7 @@ button[title="Switch between dark and light mode"] svg,
 
 .menu__link {
   border-radius: 6px;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .menu__link:hover {
@@ -696,14 +699,14 @@ div[class*="searchResults"],
 div[class*="searchResults"] *,
 .search-result-match,
 .search-result-match *,
-[class*="search"] div,
-[class*="search"] p,
-[class*="search"] span,
-[class*="search"] a,
-[class*="Search"] div,
-[class*="Search"] p,
-[class*="Search"] span,
-[class*="Search"] a {
+.navbar [class*="search"] div,
+.navbar [class*="search"] p,
+.navbar [class*="search"] span,
+.navbar [class*="search"] a,
+.navbar [class*="Search"] div,
+.navbar [class*="Search"] p,
+.navbar [class*="Search"] span,
+.navbar [class*="Search"] a {
   color: #1f2937 !important;
   -webkit-text-fill-color: #1f2937 !important;
 }
@@ -720,14 +723,14 @@ div[class*="searchResults"] *,
 [data-theme='dark'] div[class*="searchResults"] *,
 [data-theme='dark'] .search-result-match,
 [data-theme='dark'] .search-result-match *,
-[data-theme='dark'] [class*="search"] div,
-[data-theme='dark'] [class*="search"] p,
-[data-theme='dark'] [class*="search"] span,
-[data-theme='dark'] [class*="search"] a,
-[data-theme='dark'] [class*="Search"] div,
-[data-theme='dark'] [class*="Search"] p,
-[data-theme='dark'] [class*="Search"] span,
-[data-theme='dark'] [class*="Search"] a {
+[data-theme='dark'] .navbar [class*="search"] div,
+[data-theme='dark'] .navbar [class*="search"] p,
+[data-theme='dark'] .navbar [class*="search"] span,
+[data-theme='dark'] .navbar [class*="search"] a,
+[data-theme='dark'] .navbar [class*="Search"] div,
+[data-theme='dark'] .navbar [class*="Search"] p,
+[data-theme='dark'] .navbar [class*="Search"] span,
+[data-theme='dark'] .navbar [class*="Search"] a {
   color: #e2e8f0 !important;
   -webkit-text-fill-color: #e2e8f0 !important;
 }
@@ -816,23 +819,21 @@ div[class*="searchFooter"] {
 /* ULTIMATE CATCH-ALL for @easyops-cn/docusaurus-search-local plugin */
 /* This should override any inline styles or plugin defaults */
 html body .navbar__search-input,
-html body input[class*="earch"],
-html body button[class*="earch"],
-html body div[class*="earch"],
-html body span[class*="earch"],
-html body p[class*="earch"],
-html body [class*="aa-"] {
+html body .navbar input[class*="search"],
+html body .navbar button[class*="search"],
+html body .navbar div[class*="search"],
+html body .navbar span[class*="search"],
+html body .navbar [class*="aa-"] {
   color: #1f2937 !important;
   -webkit-text-fill-color: #1f2937 !important;
 }
 
 html[data-theme='dark'] body .navbar__search-input,
-html[data-theme='dark'] body input[class*="earch"],
-html[data-theme='dark'] body button[class*="earch"],
-html[data-theme='dark'] body div[class*="earch"],
-html[data-theme='dark'] body span[class*="earch"],
-html[data-theme='dark'] body p[class*="earch"],
-html[data-theme='dark'] body [class*="aa-"] {
+html[data-theme='dark'] body .navbar input[class*="search"],
+html[data-theme='dark'] body .navbar button[class*="search"],
+html[data-theme='dark'] body .navbar div[class*="search"],
+html[data-theme='dark'] body .navbar span[class*="search"],
+html[data-theme='dark'] body .navbar [class*="aa-"] {
   color: #e2e8f0 !important;
   -webkit-text-fill-color: #e2e8f0 !important;
 }

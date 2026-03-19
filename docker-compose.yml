@@ -45,13 +45,11 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Mount code for hot reload in development
-      - ./backend/app:/app/app
-      - ./docs/docs:/app/docs
+      - ./docs:/app/docs:ro
     environment:
       - QDRANT_URL=http://qdrant:6333
       - REDIS_URL=redis://redis:6379
-      - DOCS_PATH=/app/docs
+      - DOCS_PATH=/app/docs/docs
       - PYTHONUNBUFFERED=1
       - PYTHONIOENCODING=utf-8
     env_file:
@@ -64,7 +62,6 @@ services:
     restart: unless-stopped
     networks:
       - mozart-network
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
   # Frontend Docs (production build with search index)
   frontend:
